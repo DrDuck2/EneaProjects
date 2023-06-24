@@ -11,7 +11,7 @@ public class KnockKnockClient {
 
         if (args.length != 1) {
             System.err.println(
-                    "Usage: java EchoClient <host name> <port number>");
+                    "Usage: java EchoClient <port number>");
             System.exit(1);
         }
 
