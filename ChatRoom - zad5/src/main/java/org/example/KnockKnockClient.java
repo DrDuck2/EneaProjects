@@ -1,67 +1,44 @@
 package org.example;
+
 import java.io.*;
 import java.net.*;
 import java.util.logging.Logger;
 
 public class KnockKnockClient {
-    public static void main(String[] args) throws IOException {
+    private static final Logger logger = Logger.getLogger ( KnockKnockClient.class.getName ( ) );
+    public static void main( String[] args ){
 
-        if (args.length != 2) {
-            System.err.println(
-                    "Usage: java EchoClient <host name> <port number>");
-            System.exit(1);
+        if ( args.length != 2 ) {
+            logger.severe ("Usage: java EchoClient <host name> <port number>");
+            System.exit (1);
         }
 
         String hostName = args[0];
-        int portNumber = Integer.parseInt(args[1]);
+        int portNumber = Integer.parseInt (args[1]);
 
         try (
                 Socket kkSocket = new Socket(hostName, portNumber);
                 PrintWriter out = new PrintWriter(kkSocket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(kkSocket.getInputStream()))
         ) {
-            // Thread for reading server messages
-            Thread serverThread = new Thread(() -> {
-                try {
-                    String fromServer;
-                    while ((fromServer = in.readLine()) != null) {
-                        System.out.println(fromServer);
-                        if(fromServer.equals("Chat Room: You have disconnected from the Chat Room.")) break;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            serverThread.start();
+            KnockKnockListenThread listenThread = new KnockKnockListenThread(in);
+            KnockKnockSpeakThread speakThread = new KnockKnockSpeakThread(out, new BufferedReader(new InputStreamReader(System.in)));
 
-            // Thread for listening to user input
-            Thread userInputThread = new Thread(() -> {
-                try {
-                    BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-                    String fromUser;
-                    while (true) {
-                        fromUser = stdIn.readLine();
-                        if (fromUser != null) {
-                            out.println(fromUser);
-                            if(fromUser.equals("Bye")) break;
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            userInputThread.start();
+            listenThread.start();
+            speakThread.start();
 
-            serverThread.join();
-            userInputThread.join();
+            try {
+                listenThread.join();
+                speakThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
             System.exit(1);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 }
