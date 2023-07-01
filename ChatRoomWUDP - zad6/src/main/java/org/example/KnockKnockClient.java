@@ -26,6 +26,7 @@ public class KnockKnockClient {
 
         String[] receivedMessageParts = receivedMessage.split (":");
         int serverPort = Integer.parseInt (receivedMessageParts[0].trim ());
+        logger.info(receivedMessageParts[1].trim() + " From:");
         logger.info ("Senders Port: " + serverPort + " Senders address: " + serverAddress);
 
         try (

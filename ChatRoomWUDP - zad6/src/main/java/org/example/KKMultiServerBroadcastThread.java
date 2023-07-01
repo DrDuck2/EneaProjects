@@ -31,7 +31,6 @@ public class KKMultiServerBroadcastThread extends Thread {
                 logger.info ("Broadcasting message: " + BROADCAST_MESSAGE);
                 DatagramPacket packet;
                 packet = new DatagramPacket(buffer,buffer.length,address,portNumber);
-                logger.info("Server sending port: "+portNumber);
                 socket.send(packet);
                 try {
                     Thread.sleep (SLEEP_TIME_MS);
