@@ -34,10 +34,10 @@ public class KnockKnockClient {
                 e.printStackTrace();
             }
         } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + hostName);
+            logger.severe ("Don't know about host " + hostName);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " + hostName);
+            logger.severe ("Couldn't get I/O for the connection to " + hostName);
             System.exit(1);
         }
     }
