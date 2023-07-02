@@ -4,13 +4,13 @@ import java.net.*;
 import java.io.*;
 import java.util.logging.Logger;
 
-public class KKMultiServerThread extends Thread implements IObserver {
-    private static final Logger logger = Logger.getLogger (KKMultiServerThread.class.getName ());
+public class ServerThread extends Thread implements IObserver {
+    private static final Logger logger = Logger.getLogger (ServerThread.class.getName ());
     private final Socket socket;
     private volatile String outputLine = null;
 
-    public KKMultiServerThread( Socket socket ) {
-        super ("KKMultiServerThread");
+    public ServerThread( Socket socket ) {
+        super ("ServerThread");
         this.socket = socket;
     }
 
@@ -27,7 +27,7 @@ public class KKMultiServerThread extends Thread implements IObserver {
                                 socket.getInputStream ()))
         ) {
             ChatRoom.getInstance ().AddClient (this);
-            KnockKnockProtocol kkp = new KnockKnockProtocol ();
+            TalkingProtocol kkp = new TalkingProtocol ();
 
             outputLine = kkp.processInput (null); //Welcome to the Chat Room
             out.println (outputLine);
