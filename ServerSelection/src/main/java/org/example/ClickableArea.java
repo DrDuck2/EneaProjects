@@ -5,11 +5,11 @@ import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 public class ClickableArea {
-    private int areaX;
-    private int areaY;
-    private int width;
-    private int height;
-    private float drawingOffset;
+    private final int areaX;
+    private final int areaY;
+    private final int width;
+    private final int height;
+    private final float drawingOffset;
     private boolean clicked;
 
     public ClickableArea(int areaX,int areaY, int width,int height, float drawingOffset)

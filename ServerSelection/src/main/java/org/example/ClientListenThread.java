@@ -15,8 +15,8 @@ public class ClientListenThread extends Thread {
         try {
             String fromServer;
             while ( (fromServer = input.readLine ()) != null ) {
-                System.out.println (fromServer);
-                if ( fromServer.equals ("Chat Room: You have disconnected from the Chat Room.") ) {
+                System.out.println ( fromServer );
+                if ( fromServer.equals ( "Chat Room: You have disconnected from the Chat Room." ) ) {
                     break;
                 }
             }

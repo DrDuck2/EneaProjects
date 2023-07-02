@@ -20,8 +20,8 @@ public class ClientSpeakThread extends Thread {
             while ( true ) {
                 fromUser = stdIn.readLine ();
                 if ( fromUser != null ) {
-                    out.println (fromUser);
-                    if ( fromUser.equals ("Bye") ) {
+                    out.println ( fromUser );
+                    if ( fromUser.equals ( "Bye" ) ) {
                         break;
                     }
                 }

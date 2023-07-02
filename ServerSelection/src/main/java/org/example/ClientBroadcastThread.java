@@ -4,58 +4,60 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.net.SocketException;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 public class ClientBroadcastThread extends Thread {
 
-    private static final Logger logger = Logger.getLogger (ClientBroadcastThread.class.getName ());
+    private static final Logger logger = Logger.getLogger ( ClientBroadcastThread.class.getName () );
     private static final int BUFFER_SIZE = 256;
-    private final AtomicBoolean running = new AtomicBoolean (false);
-    private final Set<String> servers = new HashSet <> ();
-    public ClientBroadcastThread() {
-        super ("ClientBroadcastThread");
+    private final ClientWindowThread window;
+    private boolean switcher = true;
+    public ClientBroadcastThread( ClientWindowThread window ) {
+        super ( "ClientBroadcastThread" );
+        this.window = window;
     }
 
-    private void addServer(String server)
-    {
-        servers.add (server);
-    }
-
-    public Set<String> getServers()
-    {
-        return servers;
-    }
-    public void run()
-    {
-        running.set(true);
+    public void run( ) {
         String receivedMessage;
         String serverAddress;
-        try ( DatagramSocket socket = new DatagramSocket (null) ) {
-            socket.setReuseAddress (true);
-            socket.bind (new InetSocketAddress (6666));
+        try ( DatagramSocket socket = new DatagramSocket ( null ) ) {
+            socket.setReuseAddress ( true );
+            InetSocketAddress sixSocket = new InetSocketAddress ( 6666 );
+            InetSocketAddress sevenSocket = new InetSocketAddress ( 7777 );
             byte[] buffer = new byte[BUFFER_SIZE];
-            DatagramPacket packet = new DatagramPacket (buffer , buffer.length);
+            DatagramPacket packet = new DatagramPacket ( buffer , buffer.length );
 
-            while(running.get ()){
-                System.out.println ("Waiting for a packet...");
-                socket.receive (packet);
+            while ( ! isInterrupted () ) {
+
+                if(switcher){
+                    socket.bind(sixSocket);
+                    switcher = false;
+                }
+                else{
+                    socket.bind(sevenSocket);
+                    switcher = true;
+                }
+                logger.info ( "Waiting for a packet..." );
+                socket.receive ( packet );
+                if ( isInterrupted () ) break;
                 serverAddress = packet.getAddress ().getHostAddress ();
-                System.out.println ("Packet received");
-                receivedMessage = new String (packet.getData () , 0 , packet.getLength ());
+                logger.info ( "Packet received" );
+                receivedMessage = new String ( packet.getData () , 0 , packet.getLength () );
 
 
-                String[] receivedMessageParts = receivedMessage.split (":");
-                int serverPort = Integer.parseInt (receivedMessageParts[0].trim ());
-                logger.info(receivedMessageParts[1].trim() + " From:");
-                logger.info ("Senders Port: " + serverPort + " Senders address: " + serverAddress);
-                addServer (serverPort + ":" + serverAddress);
+                String[] receivedMessageParts = receivedMessage.split ( ":" );
+                int serverPort = Integer.parseInt ( receivedMessageParts[0].trim () );
+                logger.info ( receivedMessageParts[1].trim () + " From:" );
+                logger.info ( "Senders Port: " + serverPort + " Senders address: " + serverAddress );
+
+                window.addServer ( serverPort + ":" + serverAddress );
+
+                socket.close();
             }
         } catch ( IOException e ) {
-            throw new RuntimeException (e);
+            throw new RuntimeException ( e );
         }
     }
+
 }
