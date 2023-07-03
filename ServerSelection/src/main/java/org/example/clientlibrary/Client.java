@@ -1,8 +1,7 @@
-package org.example;
+package org.example.clientlibrary;
 
 import java.io.*;
 import java.net.*;
-import java.util.HashMap;
 import java.util.logging.Logger;
 import java.util.concurrent.CountDownLatch;
 
@@ -31,11 +30,6 @@ public class Client {
 
         // Event latch is changed inside the window thread after the client chooses the server
         eventLatch.await ();
-
-        HashMap< ClickableArea, String > map = window.getServers ();
-        for(String value : map.values ()){
-            logger.info ( value );
-        }
 
         // Closing broadcast thread because we are already connected to the server
         broadcastThread.interrupt ();

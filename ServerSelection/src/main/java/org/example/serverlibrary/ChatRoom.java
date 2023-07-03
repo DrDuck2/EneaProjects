@@ -1,4 +1,4 @@
-package org.example;
+package org.example.serverlibrary;
 
 import java.util.Set;
 import java.util.logging.Logger;

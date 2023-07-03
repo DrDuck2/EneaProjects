@@ -1,4 +1,6 @@
-package org.example;
+package org.example.serverlibrary;
+
+import org.example.serverlibrary.IObserver;
 
 public interface ISubject {
     void AddClient( IObserver client );

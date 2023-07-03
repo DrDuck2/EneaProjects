@@ -1,4 +1,4 @@
-package org.example;
+package org.example.clientlibrary;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -27,6 +27,7 @@ public class ClientWindowThread extends Thread {
     private float positionY ; // Server clickable area position offset (on y-axis)
     private int offset; // Server box offset from each other (on y-axis)
     private String serverData; // Selected server data
+    private final ScreenManager screenManager;
 
     public ClientWindowThread( CountDownLatch eventLatch ) {
         super ( "ClientWindowThread" );
@@ -34,6 +35,7 @@ public class ClientWindowThread extends Thread {
         positionY = 0.0f;
         offset = 0;
         serverData = "";
+        screenManager = new ScreenManager();
     }
 
     public void run( ) {
@@ -104,6 +106,13 @@ public class ClientWindowThread extends Thread {
             );
         } // the stack frame is popped automatically
 
+
+        //Creating default character for the client
+        CreationHandler.getInstance ().createDefaultCharacter ();
+
+        //Setting server selection screen first
+        screenManager.setCurrentScreen (  );
+
         // Make the OpenGL context current
         glfwMakeContextCurrent ( window );
         // Enable v-sync
@@ -144,12 +153,11 @@ public class ClientWindowThread extends Thread {
     private void displayServerArea( ) {
         for ( ClickableArea area : hash.keySet () ) {
             if ( area.isClicked () ) {
-                glColor3f ( 0.0f , 1.0f , 0.0f );
-                glfwSetWindowShouldClose ( window , true );
-                setClickedServerData ( hash.get ( area ) );
-                eventLatch.countDown ();
+                glColor3f ( 0.0f , 1.0f , 0.0f ); //Change color of clicked area
+
+                setClickedServerData ( hash.get ( area ) ); //Save chosen server data for later access
             } else {
-                glColor3f ( 0.0f , 0.0f , 1.0f );
+                glColor3f ( 0.0f , 0.0f , 1.0f ); //Change color of clicked area
             }
             area.draw ();
         }
@@ -166,10 +174,6 @@ public class ClientWindowThread extends Thread {
         return this.serverData;
     }
 
-
-    public HashMap< ClickableArea, String > getServers(){
-        return this.hash;
-    }
     private void cleanup( ) {
         glfwFreeCallbacks ( window );
         glfwDestroyWindow ( window );

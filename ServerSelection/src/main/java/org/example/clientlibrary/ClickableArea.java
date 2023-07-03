@@ -1,4 +1,4 @@
-package org.example;
+package org.example.clientlibrary;
 
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.glBegin;

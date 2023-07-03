@@ -1,4 +1,4 @@
-package org.example;
+package org.example.serverlibrary;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

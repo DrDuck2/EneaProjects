@@ -1,10 +1,9 @@
-package org.example;
+package org.example.clientlibrary;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 public class ClientBroadcastThread extends Thread {

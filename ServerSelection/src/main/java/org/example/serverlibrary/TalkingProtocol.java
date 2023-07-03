@@ -1,4 +1,4 @@
-package org.example;
+package org.example.serverlibrary;
 public class TalkingProtocol {
     private static final int CONNECTED = 0;
     private static final int TALKING = 1;
