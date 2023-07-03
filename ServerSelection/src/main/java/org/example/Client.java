@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import java.util.concurrent.CountDownLatch;
 
@@ -31,6 +32,11 @@ public class Client {
         // Event latch is changed inside the window thread after the client chooses the server
         eventLatch.await ();
 
+        HashMap< ClickableArea, String > map = window.getServers ();
+        for(String value : map.values ()){
+            logger.info ( value );
+        }
+
         // Closing broadcast thread because we are already connected to the server
         broadcastThread.interrupt ();
 
@@ -41,6 +47,7 @@ public class Client {
         int serverPort = Integer.parseInt ( receivedMessageParts[0].trim () );
         String serverAddress = receivedMessageParts[1];
 
+        logger.info("Connected to server on port: " + serverPort + " and address: " + serverAddress);
         // Establishing communication with the server through TCP and listening and speaking thread
         try (
                 Socket kkSocket = new Socket ( serverAddress , serverPort ) ;

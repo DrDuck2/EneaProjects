@@ -23,21 +23,12 @@ public class ClientBroadcastThread extends Thread {
         String serverAddress;
         try ( DatagramSocket socket = new DatagramSocket ( null ) ) {
             socket.setReuseAddress ( true );
-            InetSocketAddress sixSocket = new InetSocketAddress ( 6666 );
-            InetSocketAddress sevenSocket = new InetSocketAddress ( 7777 );
+            InetSocketAddress address = new InetSocketAddress ( 6666 );
+            socket.bind ( address );
             byte[] buffer = new byte[BUFFER_SIZE];
             DatagramPacket packet = new DatagramPacket ( buffer , buffer.length );
 
             while ( ! isInterrupted () ) {
-
-                if(switcher){
-                    socket.bind(sixSocket);
-                    switcher = false;
-                }
-                else{
-                    socket.bind(sevenSocket);
-                    switcher = true;
-                }
                 logger.info ( "Waiting for a packet..." );
                 socket.receive ( packet );
                 if ( isInterrupted () ) break;
@@ -52,8 +43,6 @@ public class ClientBroadcastThread extends Thread {
                 logger.info ( "Senders Port: " + serverPort + " Senders address: " + serverAddress );
 
                 window.addServer ( serverPort + ":" + serverAddress );
-
-                socket.close();
             }
         } catch ( IOException e ) {
             throw new RuntimeException ( e );

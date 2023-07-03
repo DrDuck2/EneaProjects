@@ -9,20 +9,21 @@ import java.util.logging.Logger;
 
 public class ServerBroadcastThread extends Thread {
     private static final Logger logger = Logger.getLogger ( ServerBroadcastThread.class.getName () );
-    private final int SLEEP_TIME_MS;
     private final int portNumber;
+    private final int SLEEP_TIME_MS = 5000;
+    private final int serverPort;
     private final AtomicBoolean running = new AtomicBoolean ( false );
 
-    public ServerBroadcastThread( int portNumber , int SLEEP_TIME_MS) {
+    public ServerBroadcastThread( int portNumber , int serverPort) {
         super ( "BroadcastServerThread" );
         this.portNumber = portNumber;
-        this.SLEEP_TIME_MS = SLEEP_TIME_MS;
+        this.serverPort = serverPort;
     }
 
     @Override
     public void run( ) {
         running.set ( true );
-        String BROADCAST_MESSAGE = portNumber + ":" + "Hello, are you there?";
+        String BROADCAST_MESSAGE = serverPort + ":" + "Hello, are you there?";
         byte[] buffer = BROADCAST_MESSAGE.getBytes ();
         try ( DatagramSocket socket = new DatagramSocket () ) {
             socket.setBroadcast ( true );

@@ -11,17 +11,18 @@ public class Server {
     public static void main( String[] args ) {
 
         if ( args.length != 2 ) {
-            logger.severe ( "Usage: java KKMultiServer <port number>" );
+            logger.severe ( "Usage: java KKMultiServer <port number> <server port>" );
             System.exit ( 1 );
         }
 
         int portNumber = Integer.parseInt ( args[0] );
-        int speed = Integer.parseInt ( args[1] );
+        int serverPort = Integer.parseInt ( args[1] );
+
         logger.info ( "Creating Broadcast Thread..." );
-        ServerBroadcastThread broadcast = new ServerBroadcastThread ( portNumber, speed );
+        ServerBroadcastThread broadcast = new ServerBroadcastThread ( portNumber,serverPort);
         broadcast.start ();
 
-        try ( ServerSocket serverSocket = new ServerSocket ( portNumber ) ) {
+        try ( ServerSocket serverSocket = new ServerSocket ( serverPort ) ) {
             while ( true ) {
                 logger.info ( "Creating Communication Thread..." );
                 new ServerThread ( serverSocket.accept () ).start ();

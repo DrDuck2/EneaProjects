@@ -9,6 +9,7 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
+import java.util.logging.Logger;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -19,6 +20,7 @@ import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class ClientWindowThread extends Thread {
+    private final Logger logger = Logger.getLogger (ClientWindowThread.class.getName ());
     private final HashMap < ClickableArea, String > hash = new HashMap <> (); // clickable area and server data stored as key-value pair for easier access
     private final CountDownLatch eventLatch;
     private long window;
@@ -131,7 +133,8 @@ public class ClientWindowThread extends Thread {
     // Every time a client broadcast thread catches a new packet it will add it to the window.
     // Window takes care of the duplicates
     public void addServer( String server ) {
-        if ( hash.put ( new ClickableArea ( 240 , 60 + offset , 320 , 60 , positionY ) , server ) != null ) {
+        if(!hash.containsValue ( server )) {
+            hash.put ( new ClickableArea ( 240 , 60 + offset , 320 , 60 , positionY  ),server);
             offset += 75;
             positionY += 0.25f;
         }
@@ -163,6 +166,10 @@ public class ClientWindowThread extends Thread {
         return this.serverData;
     }
 
+
+    public HashMap< ClickableArea, String > getServers(){
+        return this.hash;
+    }
     private void cleanup( ) {
         glfwFreeCallbacks ( window );
         glfwDestroyWindow ( window );
