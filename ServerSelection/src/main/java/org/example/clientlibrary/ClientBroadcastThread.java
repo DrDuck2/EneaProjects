@@ -1,5 +1,7 @@
 package org.example.clientlibrary;
 
+import org.example.clientlibrary.window.ClientWindowThread;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -11,7 +13,6 @@ public class ClientBroadcastThread extends Thread {
     private static final Logger logger = Logger.getLogger ( ClientBroadcastThread.class.getName () );
     private static final int BUFFER_SIZE = 256;
     private final ClientWindowThread window;
-    private boolean switcher = true;
     public ClientBroadcastThread( ClientWindowThread window ) {
         super ( "ClientBroadcastThread" );
         this.window = window;
@@ -41,7 +42,6 @@ public class ClientBroadcastThread extends Thread {
                 logger.info ( receivedMessageParts[1].trim () + " From:" );
                 logger.info ( "Senders Port: " + serverPort + " Senders address: " + serverAddress );
 
-                window.addServer ( serverPort + ":" + serverAddress );
             }
         } catch ( IOException e ) {
             throw new RuntimeException ( e );

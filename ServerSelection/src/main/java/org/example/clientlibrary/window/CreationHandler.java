@@ -1,21 +1,13 @@
-package org.example.clientlibrary;
+package org.example.clientlibrary.window;
 
 import org.example.clientlibrary.character.*;
 import org.example.clientlibrary.character.Character;
 
 import java.util.List;
 
-public class CreationHandler implements IServerScreen{
-
-    private final static CreationHandler handler = new CreationHandler ();
-    private CreationHandler(){}
-    public static CreationHandler getInstance()
-    {
-        return handler;
-    }
-
+public class CreationHandler implements ICreate {
     private final Character character = new Character ();
-    public void createDefaultCharacter()
+    public void create()
     {
         character.addBodyPart ( new Head ( 50 ) );
         character.addBodyPart ( new Body ( 20,100 ) );
@@ -24,8 +16,7 @@ public class CreationHandler implements IServerScreen{
         character.addBodyPart ( new Leg ( 30,"Left" ) );
         character.addBodyPart ( new Leg ( 30,"Right" ) );
     }
-
-    public void display()
+    public void draw()
     {
         float characterCenterX = 800/2.0f;
         float characterCenterY = 600/2.0f;

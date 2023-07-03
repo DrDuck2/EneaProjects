@@ -1,5 +1,7 @@
 package org.example.clientlibrary;
 
+import org.example.clientlibrary.window.ClientWindowThread;
+
 import java.io.*;
 import java.net.*;
 import java.util.logging.Logger;
@@ -17,7 +19,7 @@ public class Client {
 
         // Creating Window thread for displaying the servers
         logger.info ( "Starting Client Window..." );
-        ClientWindowThread window = new ClientWindowThread ( eventLatch );
+        ClientWindowThread window = new ClientWindowThread ();
         window.start ();
 
         // After window thread is active, we create client thread that is listening for broadcasts from the servers
@@ -35,11 +37,16 @@ public class Client {
         broadcastThread.interrupt ();
 
         // Extracting port and server address from the chosen server
-        String serverData = window.getClickedServerData ();
-        String[] receivedMessageParts = serverData.split ( ":" );
+        //String serverData = window.getClickedServerData ();
+        //String[] receivedMessageParts = serverData.split ( ":" );
 
-        int serverPort = Integer.parseInt ( receivedMessageParts[0].trim () );
-        String serverAddress = receivedMessageParts[1];
+        //int serverPort = Integer.parseInt ( receivedMessageParts[0].trim () );
+        //String serverAddress = receivedMessageParts[1];
+
+
+        //NO ERROR!
+        int serverPort = 1;
+        String serverAddress = "";
 
         logger.info("Connected to server on port: " + serverPort + " and address: " + serverAddress);
         // Establishing communication with the server through TCP and listening and speaking thread
