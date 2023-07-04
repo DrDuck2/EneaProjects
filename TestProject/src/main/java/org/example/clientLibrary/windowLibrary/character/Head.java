@@ -1,7 +1,6 @@
-package org.example.clientlibrary.character;
+package org.example.clientLibrary.windowLibrary.character;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glColor3f;
 public class Head extends BodyPart{
 
     private float headSize;

@@ -1,4 +1,4 @@
-package org.example.clientlibrary.character;
+package org.example.clientLibrary.windowLibrary.character;
 
 import java.util.Objects;
 

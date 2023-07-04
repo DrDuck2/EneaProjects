@@ -1,6 +1,4 @@
-package org.example.clientlibrary.character;
-
-import static org.lwjgl.opengl.GL11.*;
+package org.example.clientLibrary.windowLibrary.character;
 
 public abstract class BodyPart {
 

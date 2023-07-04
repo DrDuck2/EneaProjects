@@ -1,4 +1,4 @@
-package org.example.clientlibrary.character;
+package org.example.clientLibrary.windowLibrary.character;
 
 import static org.lwjgl.opengl.GL11.*;
 

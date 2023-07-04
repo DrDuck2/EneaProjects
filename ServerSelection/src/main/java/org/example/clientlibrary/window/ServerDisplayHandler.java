@@ -4,7 +4,7 @@ import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glVertex2f;
-public class ClickableArea {
+public class ServerDisplayHandler implements IHandle{
     private final int areaX;
     private final int areaY;
     private final int width;
@@ -12,7 +12,7 @@ public class ClickableArea {
     private final float drawingOffset;
     private boolean clicked;
 
-    public ClickableArea(int areaX,int areaY, int width,int height, float drawingOffset)
+    public ServerDisplayHandler( int areaX, int areaY, int width, int height, float drawingOffset)
     {
         this.areaX = areaX;
         this.areaY = areaY;

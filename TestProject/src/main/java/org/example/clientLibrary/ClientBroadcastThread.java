@@ -1,6 +1,7 @@
-package org.example.clientlibrary;
+package org.example.clientLibrary;
 
-import org.example.clientlibrary.window.ClientWindowThread;
+
+import org.example.clientLibrary.windowLibrary.ServerSelectionBlock;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -21,6 +22,7 @@ public class ClientBroadcastThread extends Thread {
     public void run( ) {
         String receivedMessage;
         String serverAddress;
+
         try ( DatagramSocket socket = new DatagramSocket ( null ) ) {
             socket.setReuseAddress ( true );
             InetSocketAddress address = new InetSocketAddress ( 6666 );
@@ -42,10 +44,11 @@ public class ClientBroadcastThread extends Thread {
                 logger.info ( receivedMessageParts[1].trim () + " From:" );
                 logger.info ( "Senders Port: " + serverPort + " Senders address: " + serverAddress );
 
+                String serverInformation = serverPort+":"+serverAddress;
 
                 //Todo
                 //Add server port and address to the server screen for selection
-
+                window.getSetupManager ().addObject (new ServerSelectionBlock () ));
                 ////
 
 

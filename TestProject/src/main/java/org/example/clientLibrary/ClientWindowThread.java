@@ -1,21 +1,18 @@
-package org.example.clientlibrary.window;
+package org.example.clientLibrary;
 
+import org.example.clientLibrary.windowLibrary.ScreenManager;
+import org.example.clientLibrary.windowLibrary.SetupManager;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
-import java.util.HashMap;
 import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
-import java.util.logging.Logger;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glColor3f;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -23,9 +20,11 @@ public class ClientWindowThread extends Thread {
     private long window;
 
     private final ScreenManager screenManager;
+    private final SetupManager setupManager;
     public ClientWindowThread() {
         super ( "ClientWindowThread" );
         this.screenManager = new ScreenManager ();
+        this.setupManager = new SetupManager ();
     }
     public void run( ) {
 
@@ -53,9 +52,9 @@ public class ClientWindowThread extends Thread {
 
 
         //Todo
-        //Screen manager setup
-
-
+        //Screen setup and screen init
+        screenManager.setCurrentScreen ( setupManager.getSimpleServerSelectionScreen ( window ) ); //returns server selection screen
+        screenManager.initScreen ();
         //////
 
 
@@ -102,13 +101,18 @@ public class ClientWindowThread extends Thread {
 
             /////
             //Displaying current screen Server selection screen or Character creation screen
-
+            screenManager.displayScreen ();
             /////
 
             glfwSwapBuffers ( window );
         }
     }
 
+
+    //Allows others to make changes to the window
+    public SetupManager getSetupManager(){
+        return setupManager;
+    }
     private void cleanup( ) {
         glfwFreeCallbacks ( window );
         glfwDestroyWindow ( window );
