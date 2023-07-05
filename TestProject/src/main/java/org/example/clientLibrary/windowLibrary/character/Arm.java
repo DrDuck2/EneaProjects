@@ -7,7 +7,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Arm extends BodyPart {
     private float armWidth;
     private float armHeight;
-    private String armIndicator;
+    private final String armIndicator;
 
     public Arm(float armWidth,float armHeight, String armIndicator){
         super();
@@ -32,7 +32,7 @@ public class Arm extends BodyPart {
     public float getHeight(){
         return armHeight;
     }
-    public void draw() {
+    public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset) {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);
         if( Objects.equals ( this.armIndicator , "Left" ) ){
@@ -47,5 +47,10 @@ public class Arm extends BodyPart {
             glVertex2f (0.25f,-0.1f);
         }
         glEnd ();
+    }
+
+    @Override
+    public String getBlockInformation( ) {
+        return null;
     }
 }

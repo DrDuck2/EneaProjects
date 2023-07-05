@@ -1,25 +1,33 @@
 package org.example.clientLibrary.windowLibrary.character;
 
-public abstract class BodyPart {
+import org.example.clientLibrary.windowLibrary.IScreenObject;
+
+public abstract class BodyPart implements IScreenObject {
 
     protected float red;
     protected float green;
     protected float blue;
 
+    protected String blockInformation;
+
     public BodyPart(){
         this.red = 0.0f;
         this.green = 0.0f;
         this.blue = 1.0f;
+        blockInformation = null;
     }
-    public void setRed(float red) {
+    public void setColor(float red, float green, float blue){
         this.red = red;
-    }
-    public void setGreen(float green){
         this.green = green;
-    }
-    public void setBlue(float blue){
         this.blue = blue;
     }
 
-    public abstract void draw();
+    public float getRed() {return red;}
+    public float getBlue(){return blue;}
+    public float getGreen(){return green;}
+
+    public String getBlockInformation(){
+        return blockInformation;
+    }
+    public abstract void draw(float leftOffset,float rightOffset,float downOffset, float upOffset);
 }

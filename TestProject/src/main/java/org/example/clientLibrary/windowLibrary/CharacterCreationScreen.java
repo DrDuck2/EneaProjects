@@ -7,6 +7,9 @@ public class CharacterCreationScreen implements IScreen {
 
     private final Set < ICreate > models;
 
+    public CharacterCreationScreen(){
+        this.models = new HashSet<> ();
+    }
     public void addModels(ICreate model){
         this.models.add ( model );
     }
@@ -17,13 +20,13 @@ public class CharacterCreationScreen implements IScreen {
         return this.models;
     }
     public void initModels(){
-
+        for(ICreate model : models){
+            model.init ();
+        }
     }
     public void displayModels(){
-
-    }
-
-    public CharacterCreationScreen(){
-        this.models = new HashSet<> ();
+        for(ICreate model: models){
+            model.display ();
+        }
     }
 }

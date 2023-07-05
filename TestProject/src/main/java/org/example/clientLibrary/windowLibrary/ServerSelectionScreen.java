@@ -11,10 +11,11 @@ public class ServerSelectionScreen implements IScreen {
     }
     public synchronized void addModels(ICreate model)
     {
-        for(ICreate screenModel : models){
-            if(!screenModel.getClass ().equals ( model.getClass () )){
-                this.models.add ( model );
-            }
+        boolean modelExists = models.stream()
+                .anyMatch(screenModel -> screenModel.getClass().equals(model.getClass()));
+
+        if (!modelExists) {
+            this.models.add(model);
         }
     }
     public synchronized void removeModels(ICreate model){
@@ -25,15 +26,14 @@ public class ServerSelectionScreen implements IScreen {
     }
 
     //Initializes callbacks for all models on the screen
-    public void initModels(){
+    public synchronized void initModels(){
         for(ICreate model : models)
         {
             model.init();
         }
     }
-
     //Displays all the blocks and clickable areas necessary
-    public void displayModels(){
+    public synchronized void displayModels(){
         for(ICreate model : models)
         {
             model.display();

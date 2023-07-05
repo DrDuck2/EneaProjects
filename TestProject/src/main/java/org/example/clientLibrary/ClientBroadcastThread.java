@@ -2,6 +2,7 @@ package org.example.clientLibrary;
 
 
 import org.example.clientLibrary.windowLibrary.ServerSelectionBlock;
+import org.example.clientLibrary.windowLibrary.SetupManager;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -48,9 +49,8 @@ public class ClientBroadcastThread extends Thread {
 
                 //Todo
                 //Add server port and address to the server screen for selection
-                window.getSetupManager ().addObject (new ServerSelectionBlock () ));
+                SetupManager.addObject ("ServerSelectHandler",new ServerSelectionBlock ( serverInformation ));
                 ////
-
 
             }
         } catch ( IOException e ) {

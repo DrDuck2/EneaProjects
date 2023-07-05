@@ -26,7 +26,7 @@ public class Leg extends BodyPart {
         return legSize;
     }
 
-    public void draw() {
+    public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset) {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);
         if( Objects.equals ( this.legIndicator , "Left" ) ){
@@ -41,5 +41,10 @@ public class Leg extends BodyPart {
             glVertex2f (0.2f,-0.8f);
         }
         glEnd ();
+    }
+
+    @Override
+    public String getBlockInformation( ) {
+        return null;
     }
 }

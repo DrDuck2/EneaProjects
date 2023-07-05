@@ -1,47 +1,71 @@
 package org.example.clientLibrary.windowLibrary;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
+import static org.lwjgl.opengl.GL11.glColor3f;
 
 public class ServerSelectHandler implements ICreate {
 
-    private final Set < IScreenObject > screenObjects;
-    private final Set < IClickable > clickableArea;
+    private final List < IScreenObject > screenObjects;
+    private final List < IClickable > clickableArea;
     private final long window;
-
     private int offset;
 
     public ServerSelectHandler(long window){
         this.window = window;
-        this.screenObjects = new HashSet <> ();
-        this.clickableArea = new HashSet <> ();
+        this.screenObjects = new CopyOnWriteArrayList <> ();
+        this.clickableArea = new CopyOnWriteArrayList <> ();
         this.offset = 0;
     }
     public synchronized void addScreenObject(IScreenObject object){
-        this.screenObjects.add ( object );
-        setClickableArea ( new ServerBlockClickableArea (  240 , 60 + offset , 320 , 60 ) );
+
+        //Adds ScreenObject
+        boolean shouldAdd = screenObjects.stream()
+                .noneMatch(existingObject -> existingObject.getBlockInformation().equals(object.getBlockInformation()));
+
+        if (shouldAdd) {
+            screenObjects.add(object);
+            addClickableArea ( new ClickableArea (  240 , 60 + offset , 320 , 60 ) );
+        }
     }
     public synchronized void removeScreenObject(IScreenObject object){
         this.screenObjects.remove(object);
     }
 
-    public synchronized Set<IScreenObject> getScreenObjects(){return this.screenObjects;}
+    public synchronized List<IScreenObject> getScreenObjects(){return this.screenObjects;}
 
-    private synchronized void setClickableArea(IClickable area){
+    public synchronized void addClickableArea(IClickable area){
         clickableArea.add ( area );
         offset+=75;
     }
-    private synchronized void removeClickableArea(IClickable area){
+    public synchronized void removeClickableArea(IClickable area){
         clickableArea.remove ( area );
     }
     public void init()
     {
+        glfwSetMouseButtonCallback ( window , ( win, button , action , mods ) -> {
+            if ( button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS ) {
+                double[] mouseX = new double[1];
+                double[] mouseY = new double[1];
+                glfwGetCursorPos ( win , mouseX , mouseY );
+
+                for ( IClickable area : clickableArea ) {
+                    area.setClicked ( area.contains ( mouseX[0] , mouseY[0] ) );
+                }
+            } else {
+                for ( IClickable area : clickableArea ) {
+                    area.setClicked ( false );
+                }
+            }
+        } );
+
         glfwSetKeyCallback ( window , ( win , key , scancode , action , mods ) -> {
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
                 glfwSetWindowShouldClose ( win , true );
@@ -50,12 +74,47 @@ public class ServerSelectHandler implements ICreate {
     public void display()
     {
         float positionY = 0;
-        for(IScreenObject object : screenObjects){
-            object.draw (positionY);
+        float red = 0.0f;
+        float green = 0.0f;
+        float blue = 0.0f;
+
+        for(int i = 0;i<clickableArea.size ();i++){
+            if ( clickableArea.get ( i ).isClicked () ) {
+                 //Change color of clicked area
+                red = 0.0f;
+                green = 1.0f;
+                blue = 0.0f;
+                //////////////
+                //Todo: Set new screen to display
+
+                //Setup information for the client to connect to the server
+                SetupManager.setLatchInfo(getServerInformation(clickableArea.get ( i )));
+                SetupManager.dropLatch();
+
+
+
+                //Todo: Retrieve server information somewhere
+                //////////////
+
+                cleanup(); //Free callbacks because they won't be necessary in new screen
+            } else {
+                red = 0.0f;
+                green = 0.0f;
+                blue = 1.0f;
+            }
+            screenObjects.get ( i ).setColor ( red,green,blue );
+            screenObjects.get ( i ).draw(0,0,positionY,0);
             positionY += 0.25f;
         }
     }
+
+    private String getServerInformation(IClickable area){
+        int index = clickableArea.indexOf ( area );
+        return screenObjects.get ( index ).getBlockInformation ();
+    }
     public void cleanup(){
         glfwFreeCallbacks ( window );
+        ScreenManager.setCurrentScreen ( SetupManager.getSimpleCharacterCreationScreen ( window ) );
+        ScreenManager.initScreen ();
     }
 }

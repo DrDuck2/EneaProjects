@@ -1,5 +1,7 @@
 package org.example.clientLibrary;
 
+import org.example.CountdownLatchWithInfo;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,11 +19,11 @@ public class Client {
         // This line is necessary for code continuation
         // We cannot create a connection between server and client if the client didn't choose which server
         // to connect to, after he chooses then the program continues creating threads for listening and speaking
-        CountDownLatch eventLatch = new CountDownLatch ( 1 );
+        CountdownLatchWithInfo<String> eventLatch = new CountdownLatchWithInfo <> ( 1 );
 
         // Creating Window thread for displaying the servers
         logger.info ( "Starting Client Window..." );
-        ClientWindowThread window = new ClientWindowThread ();
+        ClientWindowThread window = new ClientWindowThread (eventLatch);
         window.start ();
 
         // After window thread is active, we create client thread that is listening for broadcasts from the servers
@@ -38,17 +40,15 @@ public class Client {
         // Closing broadcast thread because we are already connected to the server
         broadcastThread.interrupt ();
 
+
+
         // Extracting port and server address from the chosen server
-        //String serverData = window.getClickedServerData ();
-        //String[] receivedMessageParts = serverData.split ( ":" );
+        String serverData = eventLatch.getInformation ();
+        String[] receivedMessageParts = serverData.split ( ":" );
 
-        //int serverPort = Integer.parseInt ( receivedMessageParts[0].trim () );
-        //String serverAddress = receivedMessageParts[1];
+        int serverPort = Integer.parseInt ( receivedMessageParts[0].trim () );
+        String serverAddress = receivedMessageParts[1];
 
-
-        //NO ERROR!
-        int serverPort = 1;
-        String serverAddress = "";
 
         logger.info("Connected to server on port: " + serverPort + " and address: " + serverAddress);
         // Establishing communication with the server through TCP and listening and speaking thread

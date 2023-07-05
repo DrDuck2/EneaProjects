@@ -1,7 +1,9 @@
 package org.example.clientLibrary;
 
+import org.example.CountdownLatchWithInfo;
 import org.example.clientLibrary.windowLibrary.ScreenManager;
 import org.example.clientLibrary.windowLibrary.SetupManager;
+import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -9,6 +11,7 @@ import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -18,13 +21,13 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class ClientWindowThread extends Thread {
     private long window;
+    private final CountdownLatchWithInfo<String> eventLatch;
 
-    private final ScreenManager screenManager;
-    private final SetupManager setupManager;
-    public ClientWindowThread() {
+    public static double mouseX;
+    public static double mouseY;
+    public ClientWindowThread( CountdownLatchWithInfo<String> eventLatch ) {
         super ( "ClientWindowThread" );
-        this.screenManager = new ScreenManager ();
-        this.setupManager = new SetupManager ();
+        this.eventLatch = eventLatch;
     }
     public void run( ) {
 
@@ -53,9 +56,11 @@ public class ClientWindowThread extends Thread {
 
         //Todo
         //Screen setup and screen init
-        screenManager.setCurrentScreen ( setupManager.getSimpleServerSelectionScreen ( window ) ); //returns server selection screen
-        screenManager.initScreen ();
+        SetupManager.setLatch ( eventLatch );
+        ScreenManager.setCurrentScreen ( SetupManager.getSimpleServerSelectionScreen ( window ) ); //returns server selection screen
+        ScreenManager.initScreen ();
         //////
+
 
 
 
@@ -99,20 +104,17 @@ public class ClientWindowThread extends Thread {
 
             glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+
+            glfwSetWindowTitle (window, "Mouse Coordinates: X=" + mouseX + ", Y=" + mouseY);
             /////
             //Displaying current screen Server selection screen or Character creation screen
-            screenManager.displayScreen ();
+            ScreenManager.displayScreen ();
             /////
 
             glfwSwapBuffers ( window );
         }
     }
 
-
-    //Allows others to make changes to the window
-    public SetupManager getSetupManager(){
-        return setupManager;
-    }
     private void cleanup( ) {
         glfwFreeCallbacks ( window );
         glfwDestroyWindow ( window );

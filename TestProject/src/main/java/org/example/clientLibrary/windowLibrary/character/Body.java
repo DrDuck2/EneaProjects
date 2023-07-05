@@ -26,7 +26,7 @@ public class Body extends BodyPart{
     public float getHeight(){
         return bodyHeight;
     }
-    public void draw() {
+    public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset) {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);
         glVertex2f (-0.2f,0.45f);
@@ -34,5 +34,10 @@ public class Body extends BodyPart{
         glVertex2f (0.2f,-0.2f);
         glVertex2f (-0.2f,-0.2f);
         glEnd ();
+    }
+
+    @Override
+    public String getBlockInformation( ) {
+        return null;
     }
 }
