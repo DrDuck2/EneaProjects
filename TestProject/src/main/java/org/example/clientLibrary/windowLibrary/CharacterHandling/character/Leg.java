@@ -1,4 +1,4 @@
-package org.example.clientLibrary.windowLibrary.character;
+package org.example.clientLibrary.windowLibrary.CharacterHandling.character;
 
 import java.util.Objects;
 
@@ -26,7 +26,7 @@ public class Leg extends BodyPart {
         return legSize;
     }
 
-    public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset) {
+    public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset,float scale) {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);
         if( Objects.equals ( this.legIndicator , "Left" ) ){

@@ -1,10 +1,15 @@
-package org.example.clientLibrary.windowLibrary;
+package org.example.clientLibrary.windowLibrary.CharacterHandling;
 
 import org.example.clientLibrary.ClientWindowThread;
+import org.example.clientLibrary.windowLibrary.*;
+import org.example.clientLibrary.windowLibrary.Interfaces.ICreate;
+import org.example.clientLibrary.windowLibrary.Interfaces.IScreenObject;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
+import org.example.clientLibrary.windowLibrary.character.*;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -12,8 +17,8 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 public class CharacterCreateHandler implements ICreate {
 
-    private final List <IScreenObject> bodyParts;
-    private final List<IClickable> clickableArea;
+    private final List < IScreenObject > bodyParts;
+    private final List< IClickable > clickableArea;
 
     private long window;
     public CharacterCreateHandler(long window){
@@ -88,11 +93,12 @@ public class CharacterCreateHandler implements ICreate {
                     bodyParts.get ( i ).setColor ( 0.5f,0.0f,0.0f );
                 }
             }
-            bodyParts.get ( i ).draw ( 0,0,0,0 );
+            bodyParts.get ( i ).draw ( 0,0,0,0,0 );
         }
     }
     public void cleanup(){
         glfwFreeCallbacks ( window );
-        glfwSetWindowShouldClose ( window,true );
+        ScreenManager.setCurrentScreen ( SetupManager.getSimpleGameScreen (new UserCharacter ( bodyParts ), window ) );
+        ScreenManager.initScreen ();
     }
 }

@@ -1,12 +1,11 @@
-package org.example.clientLibrary.windowLibrary;
+package org.example.clientLibrary.windowLibrary.Interfaces;
 
 import java.util.Set;
 
-public interface IScreen {
+public interface IScreen extends  IShowScreen{
 
     void addModels(ICreate model);
     void removeModels(ICreate model);
     Set <ICreate> getModels();
-    void initModels();
-    void displayModels();
+
 }

@@ -1,4 +1,4 @@
-package org.example.clientLibrary.windowLibrary.character;
+package org.example.clientLibrary.windowLibrary.CharacterHandling.character;
 
 import static org.lwjgl.opengl.GL11.*;
 public class Head extends BodyPart{
@@ -18,7 +18,7 @@ public class Head extends BodyPart{
     {
         return headSize;
     }
-    public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset) {
+    public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset,float scale) {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);
         glVertex2f (-0.2f,0.9f);

@@ -1,9 +1,10 @@
-package org.example.clientLibrary.windowLibrary;
+package org.example.clientLibrary.windowLibrary.ServerSelectionHandling;
+
+import org.example.clientLibrary.windowLibrary.Interfaces.IScreenObject;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class ServerSelectionBlock implements IScreenObject {
-
 
     private float red;
     private float blue;
@@ -34,7 +35,7 @@ public class ServerSelectionBlock implements IScreenObject {
     public float getGreen(){
         return green;
     }
-    public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset)
+    public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset,float scale)
     {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);

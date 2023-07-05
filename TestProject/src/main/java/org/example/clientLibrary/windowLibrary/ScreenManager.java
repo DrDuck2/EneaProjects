@@ -1,9 +1,11 @@
 package org.example.clientLibrary.windowLibrary;
 
+import org.example.clientLibrary.windowLibrary.Interfaces.IShowScreen;
+
 public class ScreenManager {
 
-    private static IScreen currentScreen;
-    public static void setCurrentScreen(IScreen newScreen)
+    private static IShowScreen currentScreen;
+    public static void setCurrentScreen(IShowScreen newScreen)
     {
         currentScreen = newScreen;
     }

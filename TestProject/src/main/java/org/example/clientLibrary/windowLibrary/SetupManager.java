@@ -1,14 +1,20 @@
 package org.example.clientLibrary.windowLibrary;
 
 import org.example.CountdownLatchWithInfo;
-import org.example.clientLibrary.windowLibrary.character.Arm;
-import org.example.clientLibrary.windowLibrary.character.Body;
-import org.example.clientLibrary.windowLibrary.character.Head;
-import org.example.clientLibrary.windowLibrary.character.Leg;
+import org.example.clientLibrary.windowLibrary.CharacterHandling.CharacterCreateHandler;
+import org.example.clientLibrary.windowLibrary.CharacterHandling.CharacterCreationScreen;
+import org.example.clientLibrary.windowLibrary.CharacterHandling.UserCharacter;
+import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Arm;
+import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Body;
+import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Head;
+import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Leg;
+import org.example.clientLibrary.windowLibrary.GameScreenHandling.GameHandler;
+import org.example.clientLibrary.windowLibrary.GameScreenHandling.GameScreen;
+import org.example.clientLibrary.windowLibrary.Interfaces.*;
+import org.example.clientLibrary.windowLibrary.ServerSelectionHandling.ServerSelectHandler;
+import org.example.clientLibrary.windowLibrary.ServerSelectionHandling.ServerSelectionScreen;
 
-import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 
 public class SetupManager {
 
@@ -30,7 +36,7 @@ public class SetupManager {
     public static void dropLatch(){
         countDownLatch.countDown ();
     }
-    public static IScreen getSimpleServerSelectionScreen(long window){
+    public static IShowScreen getSimpleServerSelectionScreen( long window){
         ServerSelectionScreen serverSelectionScreen = new ServerSelectionScreen ();
         ServerSelectHandler serverSelectHandler = new ServerSelectHandler ( window );
         serverSelectionScreen.addModels ( serverSelectHandler );
@@ -38,7 +44,7 @@ public class SetupManager {
         return serverSelectionScreen;
 
     }
-    public static IScreen getSimpleCharacterCreationScreen(long window){
+    public static IShowScreen getSimpleCharacterCreationScreen(long window){
         CharacterCreationScreen characterCreationScreen = new CharacterCreationScreen ();
         CharacterCreateHandler characterCreateHandler = new CharacterCreateHandler (window);
         characterCreationScreen.addModels ( characterCreateHandler );
@@ -59,18 +65,28 @@ public class SetupManager {
         currentScreen = characterCreationScreen;
         return characterCreationScreen;
     }
+
+    public static IShowScreen getSimpleGameScreen( UserCharacter character, long window){
+        GameScreen gameScreen = new GameScreen ();
+        character.scale(0.5f);
+        GameHandler gameHandler = new GameHandler (character,window);
+        gameScreen.addModel ( gameHandler );
+        currentScreen = gameScreen;
+        return gameScreen;
+
+    }
     public static void addModel( ICreate model){
         currentScreen.addModels ( model );
     }
-    public static void addObject(String modelType,IScreenObject object){
-        Set<ICreate> screenModels = currentScreen.getModels ();
-        for(ICreate model : screenModels){
+    public static void addObject( String modelType, IScreenObject object){
+        Set< IShow > screenModels = currentScreen.getModels ();
+        for(IShow model : screenModels){
             if(isCorrectModel(model,modelType)){
                 model.addScreenObject ( object );
             }
         }
     }
-    private static boolean isCorrectModel(ICreate model,String modelType){
+    private static boolean isCorrectModel(IShow model,String modelType){
         String className = model.getClass ().getName ();
         String simpleClassName = className.substring ( className.lastIndexOf ( '.' ) +1 );
         if(simpleClassName.equals ( modelType )) return true;

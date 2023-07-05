@@ -1,7 +1,7 @@
 package org.example.clientLibrary;
 
 
-import org.example.clientLibrary.windowLibrary.ServerSelectionBlock;
+import org.example.clientLibrary.windowLibrary.ServerSelectionHandling.ServerSelectionBlock;
 import org.example.clientLibrary.windowLibrary.SetupManager;
 
 import java.io.IOException;

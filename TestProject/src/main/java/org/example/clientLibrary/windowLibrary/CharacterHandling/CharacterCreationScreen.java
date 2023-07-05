@@ -1,4 +1,7 @@
-package org.example.clientLibrary.windowLibrary;
+package org.example.clientLibrary.windowLibrary.CharacterHandling;
+
+import org.example.clientLibrary.windowLibrary.Interfaces.ICreate;
+import org.example.clientLibrary.windowLibrary.Interfaces.IScreen;
 
 import java.util.HashSet;
 import java.util.Set;

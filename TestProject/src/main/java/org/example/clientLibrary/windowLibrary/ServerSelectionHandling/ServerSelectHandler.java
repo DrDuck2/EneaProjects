@@ -1,6 +1,9 @@
-package org.example.clientLibrary.windowLibrary;
+package org.example.clientLibrary.windowLibrary.ServerSelectionHandling;
 
-import java.util.HashMap;
+import org.example.clientLibrary.windowLibrary.*;
+import org.example.clientLibrary.windowLibrary.Interfaces.ICreate;
+import org.example.clientLibrary.windowLibrary.Interfaces.IScreenObject;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -9,7 +12,6 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
-import static org.lwjgl.opengl.GL11.glColor3f;
 
 public class ServerSelectHandler implements ICreate {
 
@@ -103,7 +105,7 @@ public class ServerSelectHandler implements ICreate {
                 blue = 1.0f;
             }
             screenObjects.get ( i ).setColor ( red,green,blue );
-            screenObjects.get ( i ).draw(0,0,positionY,0);
+            screenObjects.get ( i ).draw(0,0,positionY,0,0);
             positionY += 0.25f;
         }
     }

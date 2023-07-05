@@ -1,6 +1,6 @@
-package org.example.clientLibrary.windowLibrary.character;
+package org.example.clientLibrary.windowLibrary.CharacterHandling.character;
 
-import org.example.clientLibrary.windowLibrary.IScreenObject;
+import org.example.clientLibrary.windowLibrary.Interfaces.IScreenObject;
 
 public abstract class BodyPart implements IScreenObject {
 
@@ -29,5 +29,5 @@ public abstract class BodyPart implements IScreenObject {
     public String getBlockInformation(){
         return blockInformation;
     }
-    public abstract void draw(float leftOffset,float rightOffset,float downOffset, float upOffset);
+    public abstract void draw(float leftOffset,float rightOffset,float downOffset, float upOffset,float scale);
 }
