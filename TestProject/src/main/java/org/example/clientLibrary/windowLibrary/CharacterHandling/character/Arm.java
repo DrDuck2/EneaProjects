@@ -36,15 +36,15 @@ public class Arm extends BodyPart {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);
         if( Objects.equals ( this.armIndicator , "Left" ) ){
-            glVertex2f (-0.4f,0.45f);
-            glVertex2f (-0.25f,0.45f);
-            glVertex2f (-0.25f,-0.1f);
-            glVertex2f (-0.4f,-0.1f);
+            glVertex2f (-0.4f*scale-leftOffset+rightOffset,0.45f*scale-downOffset+upOffset);
+            glVertex2f (-0.25f*scale-leftOffset+rightOffset,0.45f*scale-downOffset+upOffset);
+            glVertex2f (-0.25f*scale-leftOffset+rightOffset,-0.1f*scale-downOffset+upOffset);
+            glVertex2f (-0.4f*scale-leftOffset+rightOffset,-0.1f*scale-downOffset+upOffset);
         }else{
-            glVertex2f (0.25f,0.45f);
-            glVertex2f (0.4f,0.45f);
-            glVertex2f (0.4f,-0.1f);
-            glVertex2f (0.25f,-0.1f);
+            glVertex2f (0.25f*scale-leftOffset+rightOffset,0.45f*scale-downOffset+upOffset);
+            glVertex2f (0.4f*scale-leftOffset+rightOffset,0.45f*scale-downOffset+upOffset);
+            glVertex2f (0.4f*scale-leftOffset+rightOffset,-0.1f*scale-downOffset+upOffset);
+            glVertex2f (0.25f*scale-leftOffset+rightOffset,-0.1f*scale-downOffset+upOffset);
         }
         glEnd ();
     }

@@ -22,9 +22,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class ClientWindowThread extends Thread {
     private long window;
     private final CountdownLatchWithInfo<String> eventLatch;
-
-    public static double mouseX;
-    public static double mouseY;
     public ClientWindowThread( CountdownLatchWithInfo<String> eventLatch ) {
         super ( "ClientWindowThread" );
         this.eventLatch = eventLatch;
@@ -60,9 +57,6 @@ public class ClientWindowThread extends Thread {
         ScreenManager.setCurrentScreen ( SetupManager.getSimpleServerSelectionScreen ( window ) ); //returns server selection screen
         ScreenManager.initScreen ();
         //////
-
-
-
 
 
         // Get the thread stack and push a new frame
@@ -104,8 +98,6 @@ public class ClientWindowThread extends Thread {
 
             glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-
-            glfwSetWindowTitle (window, "Mouse Coordinates: X=" + mouseX + ", Y=" + mouseY);
             /////
             //Displaying current screen Server selection screen or Character creation screen
             ScreenManager.displayScreen ();

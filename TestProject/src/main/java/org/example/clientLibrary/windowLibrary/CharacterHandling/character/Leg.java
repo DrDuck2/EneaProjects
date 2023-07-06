@@ -30,15 +30,15 @@ public class Leg extends BodyPart {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);
         if( Objects.equals ( this.legIndicator , "Left" ) ){
-            glVertex2f (-0.2f,-0.25f);
-            glVertex2f (-0.05f,-0.25f);
-            glVertex2f (-0.05f,-0.8f);
-            glVertex2f (-0.2f,-0.8f);
+            glVertex2f (-0.2f*scale-leftOffset+rightOffset,-0.25f*scale-downOffset+upOffset);
+            glVertex2f (-0.05f*scale-leftOffset+rightOffset,-0.25f*scale-downOffset+upOffset);
+            glVertex2f (-0.05f*scale-leftOffset+rightOffset,-0.8f*scale-downOffset+upOffset);
+            glVertex2f (-0.2f*scale-leftOffset+rightOffset,-0.8f*scale-downOffset+upOffset);
         }else{
-            glVertex2f (0.2f,-0.25f);
-            glVertex2f (0.05f,-0.25f);
-            glVertex2f (0.05f,-0.8f);
-            glVertex2f (0.2f,-0.8f);
+            glVertex2f (0.2f*scale-leftOffset+rightOffset,-0.25f*scale-downOffset+upOffset);
+            glVertex2f (0.05f*scale-leftOffset+rightOffset,-0.25f*scale-downOffset+upOffset);
+            glVertex2f (0.05f*scale-leftOffset+rightOffset,-0.8f*scale-downOffset+upOffset);
+            glVertex2f (0.2f*scale-leftOffset+rightOffset,-0.8f*scale-downOffset+upOffset);
         }
         glEnd ();
     }

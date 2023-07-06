@@ -1,17 +1,14 @@
 package org.example.clientLibrary.windowLibrary.GameScreenHandling;
 
-import org.example.clientLibrary.windowLibrary.CharacterHandling.UserCharacter;
-import org.example.clientLibrary.windowLibrary.Interfaces.IShow;
-
+import org.example.clientLibrary.windowLibrary.Interfaces.*;
 import java.util.HashMap;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
-public class GameHandler implements IShow {
+public class GameHandler implements IShow{
 
     private HashMap<String, UserCharacter > otherUsers;
-
     private float offsetUp;
     private float offsetDown;
     private float offsetLeft;
@@ -36,28 +33,29 @@ public class GameHandler implements IShow {
         otherUsers.remove ( userInformation );
     }
 
-    @Override
     public void init(){
         //When pressing escape just close the window
         glfwSetKeyCallback(window, (win, key, scancode, action, mods) -> {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
                 glfwSetWindowShouldClose(win, true);
-            } else if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
-                offsetUp+= 0.1f;
-            } else if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)){
-                offsetLeft+= 0.1f;
-            } else if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)){
-                offsetDown+= 0.1f;
-            } else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)){
-                offsetRight+= 0.1f;
+            }
+            if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS )) {
+                offsetUp+= 0.01f;
+            }
+            if (key == GLFW_KEY_A &&  (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+                offsetLeft += 0.01f;
+            }
+            if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS)) {
+                offsetDown += 0.01f;
+            }
+            if (key == GLFW_KEY_D &&  (action == GLFW_REPEAT || action == GLFW_PRESS)){
+                offsetRight+= 0.01f;
             }
         });
     }
-    @Override
+
     public void display(){
         personalCharacter.draw (offsetLeft,offsetRight,offsetDown,offsetUp);
-
-
     }
 
 }

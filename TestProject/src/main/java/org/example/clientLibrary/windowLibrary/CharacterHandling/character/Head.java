@@ -21,10 +21,10 @@ public class Head extends BodyPart{
     public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset,float scale) {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);
-        glVertex2f (-0.2f,0.9f);
-        glVertex2f (0.2f,0.9f);
-        glVertex2f (0.2f,0.5f);
-        glVertex2f (-0.2f,0.5f);
+        glVertex2f (-0.2f*scale-leftOffset+rightOffset,0.9f*scale-downOffset+upOffset);
+        glVertex2f (0.2f*scale-leftOffset+rightOffset,0.9f*scale-downOffset+upOffset);
+        glVertex2f (0.2f*scale-leftOffset+rightOffset,0.5f*scale-downOffset+upOffset);
+        glVertex2f (-0.2f*scale-leftOffset+rightOffset,0.5f*scale-downOffset+upOffset);
         glEnd ();
     }
     @Override

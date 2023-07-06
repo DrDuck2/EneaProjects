@@ -2,10 +2,9 @@ package org.example.clientLibrary.windowLibrary.CharacterHandling;
 
 import org.example.clientLibrary.ClientWindowThread;
 import org.example.clientLibrary.windowLibrary.*;
-import org.example.clientLibrary.windowLibrary.Interfaces.ICreate;
-import org.example.clientLibrary.windowLibrary.Interfaces.IScreenObject;
+import org.example.clientLibrary.windowLibrary.GameScreenHandling.UserCharacter;
+import org.example.clientLibrary.windowLibrary.Interfaces.*;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
-import org.example.clientLibrary.windowLibrary.character.*;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -20,11 +19,14 @@ public class CharacterCreateHandler implements ICreate {
     private final List < IScreenObject > bodyParts;
     private final List< IClickable > clickableArea;
 
+    private boolean screenSwitch;
+
     private long window;
     public CharacterCreateHandler(long window){
         bodyParts = new CopyOnWriteArrayList <> ();
         clickableArea = new CopyOnWriteArrayList <> ();
         this.window = window;
+        screenSwitch = false;
     }
 
     public synchronized void addScreenObject(IScreenObject object){
@@ -47,14 +49,6 @@ public class CharacterCreateHandler implements ICreate {
         clickableArea.remove ( area );
     }
     public void init(){
-
-        glfwSetCursorPosCallback(window, new GLFWCursorPosCallback () {
-            @Override
-            public void invoke(long window, double xpos, double ypos) {
-                ClientWindowThread.mouseX = xpos;
-                ClientWindowThread.mouseY = ypos;
-            }
-        });
 
         glfwSetMouseButtonCallback ( window , ( win, button , action , mods ) -> {
             if ( button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS ) {
@@ -79,22 +73,30 @@ public class CharacterCreateHandler implements ICreate {
 
         glfwSetKeyCallback ( window , ( win , key , scancode , action , mods ) -> {
             if ( key == GLFW_KEY_ENTER && action == GLFW_RELEASE )
-                cleanup ();
+                setSwitchScreen(true);
         } );
     }
     public void display(){
-        for(int i = 0;i<clickableArea.size ();i++){
-            if(clickableArea.get ( i ).isClicked ()){
-                if(bodyParts.get ( i ).getRed () == 0.5f){
-                    bodyParts.get ( i ).setColor ( 0.0f,1.0f,0.0f );
-                }else if(bodyParts.get ( i ).getGreen () == 1.0f){
-                    bodyParts.get ( i ).setColor ( 0.0f,0.0f,1.0f );
-                }else{
-                    bodyParts.get ( i ).setColor ( 0.5f,0.0f,0.0f );
+        if(screenSwitch){
+            cleanup ();
+        }else{
+            for(int i = 0;i<clickableArea.size ();i++){
+                if(clickableArea.get ( i ).isClicked ()){
+                    if(bodyParts.get ( i ).getRed () == 0.5f){
+                        bodyParts.get ( i ).setColor ( 0.0f,1.0f,0.0f );
+                    }else if(bodyParts.get ( i ).getGreen () == 1.0f){
+                        bodyParts.get ( i ).setColor ( 0.0f,0.0f,1.0f );
+                    }else{
+                        bodyParts.get ( i ).setColor ( 0.5f,0.0f,0.0f );
+                    }
                 }
+                bodyParts.get ( i ).draw ( 0,0,0,0,1 );
             }
-            bodyParts.get ( i ).draw ( 0,0,0,0,0 );
         }
+    }
+
+    private void setSwitchScreen(boolean value){
+        screenSwitch = value;
     }
     public void cleanup(){
         glfwFreeCallbacks ( window );

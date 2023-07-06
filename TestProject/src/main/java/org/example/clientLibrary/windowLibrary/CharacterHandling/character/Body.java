@@ -29,10 +29,10 @@ public class Body extends BodyPart{
     public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset,float scale) {
         glColor3f ( red,green,blue );
         glBegin(GL_QUADS);
-        glVertex2f (-0.2f,0.45f);
-        glVertex2f (0.2f,0.45f);
-        glVertex2f (0.2f,-0.2f);
-        glVertex2f (-0.2f,-0.2f);
+        glVertex2f (-0.2f*scale-leftOffset+rightOffset,0.45f*scale-downOffset+upOffset);
+        glVertex2f (0.2f*scale-leftOffset+rightOffset,0.45f*scale-downOffset+upOffset);
+        glVertex2f (0.2f*scale-leftOffset+rightOffset,-0.2f*scale-downOffset+upOffset);
+        glVertex2f (-0.2f*scale-leftOffset+rightOffset,-0.2f*scale-downOffset+upOffset);
         glEnd ();
     }
 

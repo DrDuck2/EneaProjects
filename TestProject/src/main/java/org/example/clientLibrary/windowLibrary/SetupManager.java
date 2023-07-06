@@ -3,7 +3,7 @@ package org.example.clientLibrary.windowLibrary;
 import org.example.CountdownLatchWithInfo;
 import org.example.clientLibrary.windowLibrary.CharacterHandling.CharacterCreateHandler;
 import org.example.clientLibrary.windowLibrary.CharacterHandling.CharacterCreationScreen;
-import org.example.clientLibrary.windowLibrary.CharacterHandling.UserCharacter;
+import org.example.clientLibrary.windowLibrary.GameScreenHandling.UserCharacter;
 import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Arm;
 import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Body;
 import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Head;
@@ -19,8 +19,8 @@ import java.util.Set;
 public class SetupManager {
 
     private static IScreen currentScreen;
-
     private static CountdownLatchWithInfo <String> countDownLatch;
+
     public static void setCurrentScreen(IScreen newScreen)
     {
         currentScreen = newScreen;
@@ -36,18 +36,23 @@ public class SetupManager {
     public static void dropLatch(){
         countDownLatch.countDown ();
     }
-    public static IShowScreen getSimpleServerSelectionScreen( long window){
+
+
+
+    public static ServerSelectionScreen getSimpleServerSelectionScreen( long window){
         ServerSelectionScreen serverSelectionScreen = new ServerSelectionScreen ();
         ServerSelectHandler serverSelectHandler = new ServerSelectHandler ( window );
-        serverSelectionScreen.addModels ( serverSelectHandler );
+
+
+        addModels ( serverSelectionScreen,serverSelectHandler );
         setCurrentScreen ( serverSelectionScreen );
-        return serverSelectionScreen;
+        return  serverSelectionScreen;
 
     }
-    public static IShowScreen getSimpleCharacterCreationScreen(long window){
+    public static CharacterCreationScreen getSimpleCharacterCreationScreen(long window){
         CharacterCreationScreen characterCreationScreen = new CharacterCreationScreen ();
         CharacterCreateHandler characterCreateHandler = new CharacterCreateHandler (window);
-        characterCreationScreen.addModels ( characterCreateHandler );
+
         characterCreateHandler.addScreenObject ( new Head ( 50 ) );
         characterCreateHandler.addScreenObject ( new Body ( 20,100 ) );
         characterCreateHandler.addScreenObject ( new Arm ( 80,20,"Left" ) );
@@ -62,36 +67,56 @@ public class SetupManager {
         characterCreateHandler.addClickableArea ( new ClickableArea ( 320,375,60,165 ) );
         characterCreateHandler.addClickableArea ( new ClickableArea ( 420,375,60,165 ) );
 
-        currentScreen = characterCreationScreen;
+        addModels (characterCreationScreen ,characterCreateHandler );
+        setCurrentScreen ( characterCreationScreen );
         return characterCreationScreen;
     }
 
-    public static IShowScreen getSimpleGameScreen( UserCharacter character, long window){
+    public static GameScreen getSimpleGameScreen( UserCharacter character, long window){
         GameScreen gameScreen = new GameScreen ();
-        character.scale(0.5f);
+        character.scale(0.2f);
         GameHandler gameHandler = new GameHandler (character,window);
-        gameScreen.addModel ( gameHandler );
-        currentScreen = gameScreen;
-        return gameScreen;
 
+        addModels(gameScreen,gameHandler);
+
+        setCurrentScreen ( gameScreen );
+        return gameScreen;
     }
-    public static void addModel( ICreate model){
-        currentScreen.addModels ( model );
+    public static void addModels(Object screen, Object model) {
+        if (screen instanceof IModelContainer) {
+            if (model instanceof ICreate) {
+                ((IModelContainer<ICreate>) screen).addModel((ICreate) model);
+            } else if (model instanceof IShow) {
+                ((IModelContainer<IShow>) screen).addModel((IShow) model);
+            } else {
+                throw new IllegalArgumentException("Unsupported model type");
+            }
+        } else {
+            throw new IllegalArgumentException("Unsupported screen type");
+        }
     }
-    public static void addObject( String modelType, IScreenObject object){
-        Set< IShow > screenModels = currentScreen.getModels ();
-        for(IShow model : screenModels){
-            if(isCorrectModel(model,modelType)){
-                model.addScreenObject ( object );
+    public static void addObject(String modelType, Object object) {
+        if(currentScreen instanceof GameScreen){
+
+        }else if(currentScreen instanceof CharacterCreationScreen || currentScreen instanceof ServerSelectionScreen){
+            Set<ICreate> models = ((IModelContainer<ICreate>) currentScreen).getModels ();
+            for(ICreate model : models){
+                if(isCorrectModel ( model,modelType )){
+                    if(object instanceof IScreenObject){
+                        model.addScreenObject ( ((IScreenObject) object) );
+                    }
+                }
             }
         }
     }
-    private static boolean isCorrectModel(IShow model,String modelType){
-        String className = model.getClass ().getName ();
-        String simpleClassName = className.substring ( className.lastIndexOf ( '.' ) +1 );
-        if(simpleClassName.equals ( modelType )) return true;
+
+    private static boolean isCorrectModel(ICreate model, String modelType) {
+        String className = model.getClass().getName();
+        String simpleClassName = className.substring(className.lastIndexOf('.') + 1);
+
+        if (simpleClassName.equals(modelType)) {
+            return true;
+        }
         return false;
     }
-
-
 }

@@ -1,7 +1,6 @@
-package org.example.clientLibrary.windowLibrary.CharacterHandling;
+package org.example.clientLibrary.windowLibrary.GameScreenHandling;
 
 import org.example.clientLibrary.windowLibrary.Interfaces.IScreenObject;
-import org.example.clientLibrary.windowLibrary.character.*;
 
 import java.util.List;
 

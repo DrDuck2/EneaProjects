@@ -40,8 +40,6 @@ public class Client {
         // Closing broadcast thread because we are already connected to the server
         broadcastThread.interrupt ();
 
-
-
         // Extracting port and server address from the chosen server
         String serverData = eventLatch.getInformation ();
         String[] receivedMessageParts = serverData.split ( ":" );

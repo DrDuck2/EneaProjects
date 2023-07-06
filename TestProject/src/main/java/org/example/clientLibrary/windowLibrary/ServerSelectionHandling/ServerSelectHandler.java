@@ -1,8 +1,7 @@
 package org.example.clientLibrary.windowLibrary.ServerSelectionHandling;
 
 import org.example.clientLibrary.windowLibrary.*;
-import org.example.clientLibrary.windowLibrary.Interfaces.ICreate;
-import org.example.clientLibrary.windowLibrary.Interfaces.IScreenObject;
+import org.example.clientLibrary.windowLibrary.Interfaces.*;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -92,8 +91,6 @@ public class ServerSelectHandler implements ICreate {
                 //Setup information for the client to connect to the server
                 SetupManager.setLatchInfo(getServerInformation(clickableArea.get ( i )));
                 SetupManager.dropLatch();
-
-
 
                 //Todo: Retrieve server information somewhere
                 //////////////
