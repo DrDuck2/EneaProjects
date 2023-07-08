@@ -1,9 +1,10 @@
 package org.example.clientLibrary.windowLibrary;
 
 public interface IClickable {
+    boolean contains( double mouseX , double mouseY );
 
-    boolean contains(double mouseX,double mouseY);
-    void setClicked(boolean clicked);
-    boolean isClicked();
+    void setClicked( boolean clicked );
+
+    boolean isClicked( );
 
 }

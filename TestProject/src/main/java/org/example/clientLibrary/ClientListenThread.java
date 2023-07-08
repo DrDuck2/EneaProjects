@@ -7,7 +7,6 @@ import java.io.IOException;
 
 public class ClientListenThread extends Thread {
     private final BufferedReader input;
-
     public ClientListenThread( BufferedReader input ) {
         this.input = input;
     }

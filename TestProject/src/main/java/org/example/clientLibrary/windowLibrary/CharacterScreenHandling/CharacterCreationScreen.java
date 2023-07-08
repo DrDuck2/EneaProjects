@@ -5,27 +5,38 @@ import org.example.clientLibrary.windowLibrary.Interfaces.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CharacterCreationScreen implements IScreen, IModelContainer<ICreate> {
-    private final Set < ICreate > models;
-    public CharacterCreationScreen(){
-        this.models = new HashSet<> ();
+public class CharacterCreationScreen implements IScreen, IModelContainer < IModel > {
+    private final Set < IModel > models;
+
+    public CharacterCreationScreen( ) {
+        this.models = new HashSet <> ();
     }
-    public void addModel(ICreate model){
+
+    @Override
+    public void addModel( IModel model ) {
         this.models.add ( model );
     }
-    public void removeModel(ICreate model){
+
+    @Override
+    public void removeModel( IModel model ) {
         this.models.remove ( model );
     }
-    public Set <ICreate> getModels(){
+
+    @Override
+    public Set < IModel > getModels( ) {
         return this.models;
     }
-    public void init(){
-        for(ICreate model : models){
+
+    @Override
+    public void initModels( ) {
+        for ( IModel model : models ) {
             model.init ();
         }
     }
-    public void display(){
-        for(ICreate model: models){
+
+    @Override
+    public void displayModels( ) {
+        for ( IModel model : models ) {
             model.display ();
         }
     }

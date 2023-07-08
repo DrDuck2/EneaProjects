@@ -2,16 +2,13 @@ package org.example.clientLibrary;
 
 import org.example.clientLibrary.windowManager.CommunicationManager;
 
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 
 public class ClientSpeakThread extends Thread {
     private final PrintWriter out;
-    private final BufferedReader stdIn;
 
-    public ClientSpeakThread( PrintWriter out , BufferedReader stdIn ) {
+    public ClientSpeakThread( PrintWriter out ) {
         this.out = out;
-        this.stdIn = stdIn;
     }
 
     @Override

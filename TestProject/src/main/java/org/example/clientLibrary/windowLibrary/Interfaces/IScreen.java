@@ -1,7 +1,7 @@
 package org.example.clientLibrary.windowLibrary.Interfaces;
 
 public interface IScreen {
-    void init();
-    void display();
+    void initModels();
+    void displayModels();
 
 }
