@@ -1,9 +1,8 @@
 package org.example.clientLibrary;
 
 import org.example.CountdownLatchWithInfo;
-import org.example.clientLibrary.windowLibrary.ScreenManager;
-import org.example.clientLibrary.windowLibrary.SetupManager;
-import org.lwjgl.glfw.GLFWCursorPosCallback;
+import org.example.clientLibrary.windowManager.ScreenManager;
+import org.example.clientLibrary.windowManager.SetupManager;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -11,7 +10,6 @@ import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
 import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;

@@ -2,17 +2,16 @@ package org.example.serverlibrary;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
-public class ChatRoom implements ISubject {
+public class ConversationManager implements ISubject {
     private final Set < IObserver > clients;
-    private static final ChatRoom instance = new ChatRoom ();
+    private static final ConversationManager instance = new ConversationManager ();
 
-    private ChatRoom( ) {
+    private ConversationManager( ) {
         clients = new HashSet <> ();
     }
 
-    public static ChatRoom getInstance( ) {
+    public static ConversationManager getInstance( ) {
         return instance;
     }
 

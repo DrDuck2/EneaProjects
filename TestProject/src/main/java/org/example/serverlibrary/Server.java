@@ -23,7 +23,7 @@ public class Server {
 
         try ( ServerSocket serverSocket = new ServerSocket ( serverPort ) ) {
             while ( true ) {
-                new ServerThread ( serverSocket.accept () ).start ();
+                new ServerCommunicationThread ( serverSocket.accept () ).start ();
             }
         } catch ( IOException e ) {
             logger.severe ( "Could not listen on port " + portNumber );

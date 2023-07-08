@@ -1,4 +1,4 @@
-package org.example.clientLibrary.windowLibrary.CharacterHandling.character;
+package org.example.clientLibrary.windowLibrary.CharacterScreenHandling.character;
 
 import java.util.Objects;
 

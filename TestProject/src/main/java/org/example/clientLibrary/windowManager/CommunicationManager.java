@@ -1,10 +1,6 @@
-package org.example.clientLibrary.windowLibrary;
+package org.example.clientLibrary.windowManager;
 
 import org.example.clientLibrary.windowLibrary.GameScreenHandling.UserCharacter;
-import org.example.clientLibrary.windowLibrary.Interfaces.IScreen;
-import org.example.clientLibrary.windowLibrary.CharacterHandling.character.*;
-
-import java.util.Set;
 
 public class CommunicationManager {
     public static UserCharacter userCharacter = null;

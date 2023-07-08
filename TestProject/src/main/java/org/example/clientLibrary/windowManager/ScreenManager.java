@@ -1,4 +1,4 @@
-package org.example.clientLibrary.windowLibrary;
+package org.example.clientLibrary.windowManager;
 
 import org.example.clientLibrary.windowLibrary.Interfaces.IScreen;
 

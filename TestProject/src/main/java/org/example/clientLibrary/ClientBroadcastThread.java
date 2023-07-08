@@ -2,7 +2,7 @@ package org.example.clientLibrary;
 
 
 import org.example.clientLibrary.windowLibrary.ServerSelectionHandling.ServerSelectionBlock;
-import org.example.clientLibrary.windowLibrary.SetupManager;
+import org.example.clientLibrary.windowManager.SetupManager;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

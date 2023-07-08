@@ -2,6 +2,8 @@ package org.example.clientLibrary.windowLibrary.ServerSelectionHandling;
 
 import org.example.clientLibrary.windowLibrary.*;
 import org.example.clientLibrary.windowLibrary.Interfaces.*;
+import org.example.clientLibrary.windowManager.ScreenManager;
+import org.example.clientLibrary.windowManager.SetupManager;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

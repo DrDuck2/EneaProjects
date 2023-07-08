@@ -1,13 +1,14 @@
-package org.example.clientLibrary.windowLibrary;
+package org.example.clientLibrary.windowManager;
 
 import org.example.CountdownLatchWithInfo;
-import org.example.clientLibrary.windowLibrary.CharacterHandling.CharacterCreateHandler;
-import org.example.clientLibrary.windowLibrary.CharacterHandling.CharacterCreationScreen;
+import org.example.clientLibrary.windowLibrary.CharacterScreenHandling.CharacterCreateHandler;
+import org.example.clientLibrary.windowLibrary.CharacterScreenHandling.CharacterCreationScreen;
+import org.example.clientLibrary.windowLibrary.ClickableArea;
 import org.example.clientLibrary.windowLibrary.GameScreenHandling.UserCharacter;
-import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Arm;
-import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Body;
-import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Head;
-import org.example.clientLibrary.windowLibrary.CharacterHandling.character.Leg;
+import org.example.clientLibrary.windowLibrary.CharacterScreenHandling.character.Arm;
+import org.example.clientLibrary.windowLibrary.CharacterScreenHandling.character.Body;
+import org.example.clientLibrary.windowLibrary.CharacterScreenHandling.character.Head;
+import org.example.clientLibrary.windowLibrary.CharacterScreenHandling.character.Leg;
 import org.example.clientLibrary.windowLibrary.GameScreenHandling.GameHandler;
 import org.example.clientLibrary.windowLibrary.GameScreenHandling.GameScreen;
 import org.example.clientLibrary.windowLibrary.Interfaces.*;
@@ -15,10 +16,8 @@ import org.example.clientLibrary.windowLibrary.ServerSelectionHandling.ServerSel
 import org.example.clientLibrary.windowLibrary.ServerSelectionHandling.ServerSelectionScreen;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SetupManager {
 

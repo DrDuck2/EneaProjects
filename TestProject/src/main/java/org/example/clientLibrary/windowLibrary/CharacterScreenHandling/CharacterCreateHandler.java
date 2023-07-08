@@ -1,10 +1,10 @@
-package org.example.clientLibrary.windowLibrary.CharacterHandling;
+package org.example.clientLibrary.windowLibrary.CharacterScreenHandling;
 
-import org.example.clientLibrary.ClientWindowThread;
 import org.example.clientLibrary.windowLibrary.*;
 import org.example.clientLibrary.windowLibrary.GameScreenHandling.UserCharacter;
 import org.example.clientLibrary.windowLibrary.Interfaces.*;
-import org.lwjgl.glfw.GLFWCursorPosCallback;
+import org.example.clientLibrary.windowManager.ScreenManager;
+import org.example.clientLibrary.windowManager.SetupManager;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

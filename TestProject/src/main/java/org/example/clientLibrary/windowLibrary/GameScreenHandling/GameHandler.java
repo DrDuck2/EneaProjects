@@ -1,6 +1,6 @@
 package org.example.clientLibrary.windowLibrary.GameScreenHandling;
 
-import org.example.clientLibrary.windowLibrary.CommunicationManager;
+import org.example.clientLibrary.windowManager.CommunicationManager;
 import org.example.clientLibrary.windowLibrary.Interfaces.*;
 import java.util.HashMap;
 

@@ -1,4 +1,4 @@
-package org.example.clientLibrary.windowLibrary.CharacterHandling.character;
+package org.example.clientLibrary.windowLibrary.CharacterScreenHandling.character;
 
 import org.example.clientLibrary.windowLibrary.Interfaces.IScreenObject;
 

@@ -1,6 +1,6 @@
 package org.example.clientLibrary;
 
-import org.example.clientLibrary.windowLibrary.CommunicationManager;
+import org.example.clientLibrary.windowManager.CommunicationManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
