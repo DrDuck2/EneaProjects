@@ -1,5 +1,7 @@
 package org.example.clientLibrary;
 
+import org.example.clientLibrary.windowLibrary.CommunicationManager;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,19 +17,20 @@ public class ClientSpeakThread extends Thread {
 
     @Override
     public void run( ) {
-        try {
-            String fromUser;
-            while ( true ) {
-                fromUser = stdIn.readLine ();
-                if ( fromUser != null ) {
-                    out.println ( fromUser );
-                    if ( fromUser.equals ( "Bye" ) ) {
-                        break;
-                    }
+        String fromUser;
+        while ( true ) {
+            try {
+                Thread.sleep ( 300 );
+            } catch ( InterruptedException e ) {
+                throw new RuntimeException ( e );
+            }
+            fromUser = CommunicationManager.sendInformation;
+            if ( fromUser != null ) {
+                out.println ( fromUser );
+                if ( fromUser.equals ( "Bye" ) ) {
+                    break;
                 }
             }
-        } catch ( IOException e ) {
-            e.printStackTrace ();
         }
     }
 }

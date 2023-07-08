@@ -1,5 +1,7 @@
 package org.example.clientLibrary;
 
+import org.example.clientLibrary.windowLibrary.CommunicationManager;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -15,8 +17,10 @@ public class ClientListenThread extends Thread {
         try {
             String fromServer;
             while ( (fromServer = input.readLine ()) != null ) {
-                System.out.println ( fromServer );
-                if ( fromServer.equals ( "Chat Room: You have disconnected from the Chat Room." ) ) {
+                if(!fromServer.equals ( "Received" )){
+                    CommunicationManager.setReceivedInformation ( fromServer );
+                }
+                if ( fromServer.equals ( "User disconnected" ) ) {
                     break;
                 }
             }

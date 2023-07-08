@@ -17,6 +17,8 @@ public class UserCharacter{
     public void scale(float scaleFactor){
         this.scaleFactor = scaleFactor;
     }
+
+    public float getScaleFactor(){return this.scaleFactor;}
     public void draw(float leftOffset,float rightOffset,float downOffset, float upOffset){
         for(IScreenObject part : bodyParts){
             part.draw ( leftOffset,rightOffset,downOffset,upOffset, scaleFactor);

@@ -18,7 +18,6 @@ public class ServerThread extends Thread implements IObserver {
     }
 
     public void ReceiveMessage( String message ) {
-        logger.info ( "Server thread " + Integer.toHexString ( this.hashCode () ) + " received message from other client" );
         outputLine = message;
     }
 
@@ -32,10 +31,6 @@ public class ServerThread extends Thread implements IObserver {
             ChatRoom.getInstance ().AddClient ( this );
             TalkingProtocol kkp = new TalkingProtocol ();
 
-            outputLine = kkp.processInput ( null ); //Welcome to the Chat Room
-            out.println ( outputLine );
-            outputLine = null;
-
             while ( ! socket.isClosed () && ! Thread.currentThread ().isInterrupted () ) {
                 if ( in.ready () ) {
                     String inputLine = in.readLine (); // Receive message from client
@@ -43,17 +38,14 @@ public class ServerThread extends Thread implements IObserver {
                         break;
                     }
                     ChatRoom.getInstance ().SendMessage ( this , inputLine ); // Forward the received message
-                    out.println ( "#MessageSent" );
+                    out.println ( "Received" );
                     outputLine = null;
                 }
-
                 if ( outputLine != null ) {
-                    logger.info ( "Server thread " + Integer.toHexString ( this.hashCode () ) + " sending message to corresponding client, message: " + outputLine );
                     out.println ( outputLine );
                     outputLine = null;
                 }
             }
-
 
             ChatRoom.getInstance ().SendMessage ( this , "DISCONNECTED" );
             outputLine = kkp.processInput ( "Bye" ); //Disconnect from the Chat Room

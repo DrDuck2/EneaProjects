@@ -1,5 +1,6 @@
 package org.example.clientLibrary.windowLibrary.GameScreenHandling;
 
+import org.example.clientLibrary.windowLibrary.CommunicationManager;
 import org.example.clientLibrary.windowLibrary.Interfaces.*;
 import java.util.HashMap;
 
@@ -26,12 +27,29 @@ public class GameHandler implements IShow{
         offsetLeft = 0.0f;
         offsetRight = 0.0f;
     }
-    public void addCharacter(String userInformation,UserCharacter character){
-        otherUsers.put (userInformation ,character );
+    public synchronized void addCharacter(String userInformation,UserCharacter character){
+        String newUserId = userInformation.split ( ":" )[0];
+        boolean updated = false;
+        for(String info : otherUsers.keySet ()){
+            if(newUserId.equals ( info.split ( ":" )[0] )){ //If user with ID already exists just update information
+                updateUser(userInformation,info);
+                updated = true;
+            }
+        }
+        if(!updated){
+            otherUsers.put (userInformation ,character );
+        }
     }
-    public void removeCharacter(String userInformation){
+
+    private synchronized void updateUser(String newInformation, String key){
+        UserCharacter character = otherUsers.get ( key );
+        otherUsers.remove ( key ); //removing it from hashmap
+        otherUsers.put ( newInformation,character ); //Adding it back with new key and new information
+    }
+    public synchronized void removeCharacter(String userInformation){
         otherUsers.remove ( userInformation );
     }
+
 
     public void init(){
         //When pressing escape just close the window
@@ -55,7 +73,18 @@ public class GameHandler implements IShow{
     }
 
     public void display(){
+        for(String key : otherUsers.keySet ()){
+            String[] values = key.split ( ":" );
+            float offsetLeft = Float.parseFloat ( values[1] );
+            float offsetRight = Float.parseFloat ( values[2] );
+            float offsetDown = Float.parseFloat ( values[3] );
+            float offsetUp = Float.parseFloat ( values[4] );
+
+            otherUsers.get ( key ).draw ( offsetLeft,offsetRight,offsetDown,offsetUp );
+        }
         personalCharacter.draw (offsetLeft,offsetRight,offsetDown,offsetUp);
+        CommunicationManager.addInformation (offsetLeft,offsetRight,offsetDown,offsetUp);
+
     }
 
 }

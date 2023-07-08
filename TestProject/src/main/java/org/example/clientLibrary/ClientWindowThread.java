@@ -110,7 +110,7 @@ public class ClientWindowThread extends Thread {
     private void cleanup( ) {
         glfwFreeCallbacks ( window );
         glfwDestroyWindow ( window );
-
+        
         glfwTerminate ();
         Objects.requireNonNull ( glfwSetErrorCallback ( null ) ).free ();
     }

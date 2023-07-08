@@ -90,7 +90,6 @@ public class ServerSelectHandler implements ICreate {
 
                 //Setup information for the client to connect to the server
                 SetupManager.setLatchInfo(getServerInformation(clickableArea.get ( i )));
-                SetupManager.dropLatch();
 
                 //Todo: Retrieve server information somewhere
                 //////////////

@@ -8,10 +8,10 @@ public class TalkingProtocol {
         String theOutput;
 
         if ( state == CONNECTED ) {
-            theOutput = "Chat Room: Welcome to the Chat Room!";
+            theOutput = "User connected";
             state = TALKING;
         } else if ( theInput.equals ("Bye") && state == TALKING ) {
-            theOutput = "Chat Room: You have disconnected from the Chat Room.";
+            theOutput = "User disconnected";
             state = CONNECTED;
         } else theOutput = "ERROR OCCURRED!";
 

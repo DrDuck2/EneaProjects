@@ -30,7 +30,6 @@ public class ServerBroadcastThread extends Thread {
             InetAddress address = InetAddress.getByName ( "255.255.255.255" );
 
             while ( running.get () ) {
-                logger.info ( "Broadcasting message: " + BROADCAST_MESSAGE );
                 DatagramPacket packet;
                 packet = new DatagramPacket ( buffer , buffer.length , address , portNumber );
                 socket.send ( packet );

@@ -102,5 +102,6 @@ public class CharacterCreateHandler implements ICreate {
         glfwFreeCallbacks ( window );
         ScreenManager.setCurrentScreen ( SetupManager.getSimpleGameScreen (new UserCharacter ( bodyParts ), window ) );
         ScreenManager.initScreen ();
+        SetupManager.dropLatch();
     }
 }

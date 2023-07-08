@@ -18,13 +18,11 @@ public class Server {
         int portNumber = Integer.parseInt ( args[0] );
         int serverPort = Integer.parseInt ( args[1] );
 
-        logger.info ( "Creating Broadcast Thread..." );
         ServerBroadcastThread broadcast = new ServerBroadcastThread ( portNumber,serverPort);
         broadcast.start ();
 
         try ( ServerSocket serverSocket = new ServerSocket ( serverPort ) ) {
             while ( true ) {
-                logger.info ( "Creating Communication Thread..." );
                 new ServerThread ( serverSocket.accept () ).start ();
             }
         } catch ( IOException e ) {
