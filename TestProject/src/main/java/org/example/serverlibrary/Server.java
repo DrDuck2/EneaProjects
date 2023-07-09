@@ -18,7 +18,7 @@ public class Server {
         int portNumber = Integer.parseInt ( args[0] );
         int serverPort = Integer.parseInt ( args[1] );
 
-        ServerBroadcastThread broadcast = new ServerBroadcastThread ( portNumber,serverPort);
+        ServerBroadcastThread broadcast = new ServerBroadcastThread ( portNumber , serverPort );
         broadcast.start ();
 
         try ( ServerSocket serverSocket = new ServerSocket ( serverPort ) ) {

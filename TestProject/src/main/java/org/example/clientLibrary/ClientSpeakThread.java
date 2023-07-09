@@ -7,11 +7,9 @@ import java.io.PrintWriter;
 
 public class ClientSpeakThread extends Thread {
     private final PrintWriter out;
-    private final BufferedReader stdIn;
 
-    public ClientSpeakThread( PrintWriter out , BufferedReader stdIn ) {
+    public ClientSpeakThread( PrintWriter out) {
         this.out = out;
-        this.stdIn = stdIn;
     }
 
     @Override
@@ -24,7 +22,7 @@ public class ClientSpeakThread extends Thread {
                 throw new RuntimeException ( e );
             }
             fromUser = CommunicationManager.sendInformation;
-            if ( fromUser != null) {
+            if ( fromUser != null ) {
                 out.println ( fromUser );
                 if ( fromUser.split ( ":" )[1].equals ( "Bye" ) ) {
                     break;

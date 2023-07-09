@@ -19,11 +19,13 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class ClientWindowThread extends Thread {
     private long window;
-    private final CountdownLatchWithInfo<String> eventLatch;
-    public ClientWindowThread( CountdownLatchWithInfo<String> eventLatch ) {
+    private final CountdownLatchWithInfo < String > eventLatch;
+
+    public ClientWindowThread( CountdownLatchWithInfo < String > eventLatch ) {
         super ( "ClientWindowThread" );
         this.eventLatch = eventLatch;
     }
+
     public void run( ) {
 
         init ();
@@ -32,7 +34,7 @@ public class ClientWindowThread extends Thread {
 
     }
 
-    private void init() {
+    private void init( ) {
         GLFWErrorCallback.createPrint ( System.err ).set ();
 
         if ( ! glfwInit () )
@@ -66,14 +68,14 @@ public class ClientWindowThread extends Thread {
             glfwGetWindowSize ( window , pWidth , pHeight );
 
             // Get the resolution of the primary monitor
-            GLFWVidMode vidmode = glfwGetVideoMode ( glfwGetPrimaryMonitor () );
+            GLFWVidMode vidMode = glfwGetVideoMode ( glfwGetPrimaryMonitor () );
 
             // Center the window
-            assert vidmode != null;
+            assert vidMode != null;
             glfwSetWindowPos (
                     window ,
-                    (vidmode.width () - pWidth.get ( 0 )) / 2 ,
-                    (vidmode.height () - pHeight.get ( 0 )) / 2
+                    (vidMode.width () - pWidth.get ( 0 )) / 2 ,
+                    (vidMode.height () - pHeight.get ( 0 )) / 2
             );
         } // the stack frame is popped automatically
 
@@ -108,7 +110,7 @@ public class ClientWindowThread extends Thread {
     private void cleanup( ) {
         glfwFreeCallbacks ( window );
         glfwDestroyWindow ( window );
-        
+
         glfwTerminate ();
         Objects.requireNonNull ( glfwSetErrorCallback ( null ) ).free ();
     }

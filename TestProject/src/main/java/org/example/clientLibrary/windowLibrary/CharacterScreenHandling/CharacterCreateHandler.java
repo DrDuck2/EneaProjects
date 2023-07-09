@@ -17,40 +17,47 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 public class CharacterCreateHandler implements ICreate {
 
     private final List < IScreenObject > bodyParts;
-    private final List< IClickable > clickableArea;
-
+    private final List < IClickable > clickableArea;
     private boolean screenSwitch;
+    private final long window;
 
-    private long window;
-    public CharacterCreateHandler(long window){
+    public CharacterCreateHandler( long window ) {
         bodyParts = new CopyOnWriteArrayList <> ();
         clickableArea = new CopyOnWriteArrayList <> ();
         this.window = window;
         screenSwitch = false;
     }
 
-    public synchronized void addScreenObject(IScreenObject object){
-        //Adds ScreenObject
+    @Override
+    public synchronized void addScreenObject( IScreenObject object ) {
         bodyParts.add ( object );
     }
-    public void removeScreenObject(IScreenObject object){
+
+    @Override
+    public void removeScreenObject( IScreenObject object ) {
         bodyParts.remove ( object );
     }
-    public List <IScreenObject> getScreenObjects(){
+
+    @Override
+    public List < IScreenObject > getScreenObjects( ) {
         return bodyParts;
     }
 
 
-    public void addClickableArea(IClickable area){
+    @Override
+    public void addClickableArea( IClickable area ) {
         clickableArea.add ( area );
     }
 
-    public void removeClickableArea(IClickable area){
+    @Override
+    public void removeClickableArea( IClickable area ) {
         clickableArea.remove ( area );
     }
-    public void init(){
 
-        glfwSetMouseButtonCallback ( window , ( win, button , action , mods ) -> {
+    @Override
+    public void init( ) {
+
+        glfwSetMouseButtonCallback ( window , ( win , button , action , mods ) -> {
             if ( button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS ) {
                 double[] mouseX = new double[1];
                 double[] mouseY = new double[1];
@@ -73,35 +80,38 @@ public class CharacterCreateHandler implements ICreate {
 
         glfwSetKeyCallback ( window , ( win , key , scancode , action , mods ) -> {
             if ( key == GLFW_KEY_ENTER && action == GLFW_RELEASE )
-                setSwitchScreen(true);
+                setSwitchScreen ();
         } );
     }
-    public void display(){
-        if(screenSwitch){
+
+    @Override
+    public void display( ) {
+        if ( screenSwitch ) {
             cleanup ();
-        }else{
-            for(int i = 0;i<clickableArea.size ();i++){
-                if(clickableArea.get ( i ).isClicked ()){
-                    if(bodyParts.get ( i ).getRed () == 0.5f){
-                        bodyParts.get ( i ).setColor ( 0.0f,1.0f,0.0f );
-                    }else if(bodyParts.get ( i ).getGreen () == 1.0f){
-                        bodyParts.get ( i ).setColor ( 0.0f,0.0f,1.0f );
-                    }else{
-                        bodyParts.get ( i ).setColor ( 0.5f,0.0f,0.0f );
+        } else {
+            for ( int i = 0 ; i < clickableArea.size () ; i++ ) {
+                if ( clickableArea.get ( i ).isClicked () ) {
+                    if ( bodyParts.get ( i ).getRed () == 0.5f ) {
+                        bodyParts.get ( i ).setColor ( 0.0f , 1.0f , 0.0f );
+                    } else if ( bodyParts.get ( i ).getGreen () == 1.0f ) {
+                        bodyParts.get ( i ).setColor ( 0.0f , 0.0f , 1.0f );
+                    } else {
+                        bodyParts.get ( i ).setColor ( 0.5f , 0.0f , 0.0f );
                     }
                 }
-                bodyParts.get ( i ).draw ( 0,0,0,0,1 );
+                bodyParts.get ( i ).draw ( 0 , 0 , 0 , 0 , 1 );
             }
         }
     }
 
-    private void setSwitchScreen(boolean value){
-        screenSwitch = value;
+    private void setSwitchScreen( ) {
+        screenSwitch = true;
     }
-    public void cleanup(){
+
+    @Override
+    public void cleanup( ) {
         glfwFreeCallbacks ( window );
-        ScreenManager.setCurrentScreen ( SetupManager.getSimpleGameScreen (new UserCharacter ( bodyParts ), window ) );
+        ScreenManager.setCurrentScreen ( SetupManager.getSimpleGameScreen ( new UserCharacter ( bodyParts ) , window ) );
         ScreenManager.initScreen ();
-        SetupManager.dropLatch();
     }
 }

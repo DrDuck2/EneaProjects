@@ -15,18 +15,21 @@ public class ConversationManager implements ISubject {
         return instance;
     }
 
+    @Override
     public synchronized void AddClient( IObserver client ) {
-        clients.add (client);
+        clients.add ( client );
     }
 
+    @Override
     public synchronized void RemoveClient( IObserver client ) {
-        clients.remove (client);
+        clients.remove ( client );
     }
 
+    @Override
     public synchronized void SendMessage( IObserver client , String message ) {
         for ( IObserver clientele : clients ) {
             if ( clientele != client ) {
-                clientele.ReceiveMessage (message);
+                clientele.ReceiveMessage ( message );
             }
         }
     }

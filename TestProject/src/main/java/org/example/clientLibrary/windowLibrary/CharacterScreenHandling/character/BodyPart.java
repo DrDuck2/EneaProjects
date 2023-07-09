@@ -10,24 +10,40 @@ public abstract class BodyPart implements IScreenObject {
 
     protected String blockInformation;
 
-    public BodyPart(){
+    public BodyPart( ) {
         this.red = 0.0f;
         this.green = 0.0f;
         this.blue = 1.0f;
         blockInformation = null;
     }
-    public void setColor(float red, float green, float blue){
+
+    @Override
+    public void setColor( float red , float green , float blue ) {
         this.red = red;
         this.green = green;
         this.blue = blue;
     }
 
-    public float getRed() {return red;}
-    public float getBlue(){return blue;}
-    public float getGreen(){return green;}
+    @Override
+    public float getRed( ) {
+        return red;
+    }
 
-    public String getBlockInformation(){
+    @Override
+    public float getBlue( ) {
+        return blue;
+    }
+
+    @Override
+    public float getGreen( ) {
+        return green;
+    }
+
+    @Override
+    public String getBlockInformation( ) {
         return blockInformation;
     }
-    public abstract void draw(float leftOffset,float rightOffset,float downOffset, float upOffset,float scale);
+
+    @Override
+    public abstract void draw( float leftOffset , float rightOffset , float downOffset , float upOffset , float scale );
 }

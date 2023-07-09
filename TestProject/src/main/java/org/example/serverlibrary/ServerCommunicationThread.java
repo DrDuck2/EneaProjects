@@ -29,12 +29,12 @@ public class ServerCommunicationThread extends Thread implements IObserver {
                                 socket.getInputStream () ) )
         ) {
             ConversationManager.getInstance ().AddClient ( this );
-            TalkingProtocol kkp = new TalkingProtocol ();
 
+            String inputLine = null;
             while ( ! socket.isClosed () && ! Thread.currentThread ().isInterrupted () ) {
                 if ( in.ready () ) {
-                    String inputLine = in.readLine (); // Receive message from client
-                    if ( inputLine.equals ( "Bye" ) ) { // Client sends Bye / Disconnect
+                    inputLine = in.readLine (); // Receive message from client
+                    if (  inputLine.split ( ":" )[1].equals ( "Bye" )  ) { // Client sends Bye / Disconnect
                         break;
                     }
                     ConversationManager.getInstance ().SendMessage ( this , inputLine ); // Forward the received message
@@ -47,8 +47,8 @@ public class ServerCommunicationThread extends Thread implements IObserver {
                 }
             }
 
-            ConversationManager.getInstance ().SendMessage ( this , "DISCONNECTED" );
-            outputLine = kkp.processInput ( "Bye" ); //Disconnect from the Chat Room
+            if(inputLine!=null) ConversationManager.getInstance ().SendMessage ( this , inputLine.split ( ":" )[0] + ":" + "Disconnected" );
+            outputLine = "User disconnected"; //Disconnect from the Chat Room
             out.println ( outputLine );
             ConversationManager.getInstance ().RemoveClient ( this );
             socket.close ();

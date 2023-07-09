@@ -20,7 +20,7 @@ public class ClientListenThread extends Thread {
                 if ( fromServer.equals ( "User disconnected" ) ) {
                     break;
                 }
-                if(!fromServer.equals ( "Received" )){
+                if ( ! fromServer.equals ( "Received" ) ) {
                     CommunicationManager.setReceivedInformation ( fromServer );
                 }
             }
