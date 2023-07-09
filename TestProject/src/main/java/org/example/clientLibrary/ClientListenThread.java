@@ -16,11 +16,11 @@ public class ClientListenThread extends Thread {
         try {
             String fromServer;
             while ( (fromServer = input.readLine ()) != null ) {
-                if(!fromServer.equals ( "Received" )){
-                    CommunicationManager.setReceivedInformation ( fromServer );
-                }
                 if ( fromServer.equals ( "User disconnected" ) ) {
                     break;
+                }
+                if(!fromServer.equals ( "Received" )){
+                    CommunicationManager.setReceivedInformation ( fromServer );
                 }
             }
         } catch ( IOException e ) {

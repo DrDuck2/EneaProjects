@@ -4,10 +4,7 @@ import org.example.clientLibrary.windowLibrary.IClickable;
 
 import java.util.List;
 
-public interface IModel {
-    void init( );
-
-    void display( );
+public interface IModel extends IHandle {
 
     void addScreenObject( IScreenObject object );
 

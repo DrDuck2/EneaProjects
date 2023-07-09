@@ -14,7 +14,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
 
-public class ServerSelectHandler implements IModel, IHandle {
+public class ServerSelectHandler implements IModel{
 
     private final List < IScreenObject > screenObjects;
     private final List < IClickable > clickableArea;

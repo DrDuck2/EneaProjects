@@ -16,14 +16,14 @@ public class ClientSpeakThread extends Thread {
         String fromUser;
         while ( true ) {
             try {
-                Thread.sleep ( 300 );
+                Thread.sleep ( 50 );
             } catch ( InterruptedException e ) {
                 throw new RuntimeException ( e );
             }
             fromUser = CommunicationManager.sendInformation;
-            if ( fromUser != null ) {
+            if ( fromUser != null) {
                 out.println ( fromUser );
-                if ( fromUser.equals ( "Bye" ) ) {
+                if ( fromUser.split ( ":" )[1].equals ( "Bye" ) ) {
                     break;
                 }
             }

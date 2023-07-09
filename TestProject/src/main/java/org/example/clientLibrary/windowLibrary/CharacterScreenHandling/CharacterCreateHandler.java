@@ -15,7 +15,7 @@ import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
-public class CharacterCreateHandler implements IModel, IHandle {
+public class CharacterCreateHandler implements IModel{
 
     private final List < IScreenObject > bodyParts;
     private final List < IClickable > clickableArea;
@@ -74,25 +74,15 @@ public class CharacterCreateHandler implements IModel, IHandle {
             }
         } );
 
-        try ( GLFWKeyCallback escapeCallback = new GLFWKeyCallback () {
-            @Override
-            public void invoke( long window , int key , int scancode , int action , int mods ) {
-                if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                    glfwSetWindowShouldClose ( window , true );
-            }
-        } ) {
-            glfwSetKeyCallback ( window , escapeCallback );
+        glfwSetKeyCallback ( window, (win,key,scancode,action,mods) ->{
+            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+                glfwSetWindowShouldClose ( window , true );
+        } );
 
-            try ( GLFWKeyCallback enterCallback = new GLFWKeyCallback () {
-                @Override
-                public void invoke( long window , int key , int scancode , int action , int mods ) {
-                    if ( key == GLFW_KEY_ENTER && action == GLFW_RELEASE )
-                        switchScreen ();
-                }
-            } ) {
-                glfwSetKeyCallback ( window , enterCallback );
-            }
-        }
+        glfwSetKeyCallback ( window, (win,key,scancode,action,mods) ->{
+            if ( key == GLFW_KEY_ENTER && action == GLFW_RELEASE )
+                switchScreen ();
+        } );
     }
 
     private void switchScreen( ) {
@@ -124,6 +114,5 @@ public class CharacterCreateHandler implements IModel, IHandle {
         glfwFreeCallbacks ( window );
         ScreenManager.setCurrentScreen ( SetupManager.getSimpleGameScreen ( new UserCharacter ( bodyParts ) , window ) );
         ScreenManager.initScreen ();
-        SetupManager.dropLatch ();
     }
 }

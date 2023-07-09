@@ -29,11 +29,11 @@ public class ServerCommunicationThread extends Thread implements IObserver {
         ) {
 
             ConversationManager.getInstance ().AddClient ( this );
-
+            String inputLine = null;
             while ( ! socket.isClosed () && ! Thread.currentThread ().isInterrupted () ) {
                 if ( in.ready () ) {
-                    String inputLine = in.readLine (); // Receive message from client
-                    if ( inputLine.equals ( "Bye" ) ) { // Client sends Bye / Disconnect
+                    inputLine = in.readLine (); // Receive message from client
+                    if ( inputLine.split ( ":" )[1].equals ( "Bye" )) { // Client sends Bye / Disconnect
                         break;
                     }
                     ConversationManager.getInstance ().SendMessage ( this , inputLine ); // Forward the received message
@@ -46,10 +46,11 @@ public class ServerCommunicationThread extends Thread implements IObserver {
                 }
             }
 
-
             //TODO: Enable disconnecting when user pressed ESC
-            ConversationManager.getInstance ().SendMessage ( this , "DISCONNECTED" );
-            out.println ( "Bye" );
+            if(inputLine!=null){
+                ConversationManager.getInstance ().SendMessage ( this , inputLine.split(":")[0] +":"+ "Disconnected" );
+            }
+            out.println ( "User disconnected" );
             ConversationManager.getInstance ().RemoveClient ( this );
             socket.close ();
 

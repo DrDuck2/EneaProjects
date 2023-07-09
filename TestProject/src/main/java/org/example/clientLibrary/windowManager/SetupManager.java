@@ -44,8 +44,7 @@ public class SetupManager {
         ServerSelectionScreen serverSelectionScreen = new ServerSelectionScreen ();
         ServerSelectHandler serverSelectHandler = new ServerSelectHandler ( window );
 
-
-        addModels ( serverSelectionScreen , serverSelectHandler );
+        serverSelectionScreen.addModel ( serverSelectHandler );
         setCurrentScreen ( serverSelectionScreen );
         return serverSelectionScreen;
 
@@ -69,7 +68,7 @@ public class SetupManager {
         characterCreateHandler.addClickableArea ( new ClickableArea ( 320 , 375 , 60 , 165 ) );
         characterCreateHandler.addClickableArea ( new ClickableArea ( 420 , 375 , 60 , 165 ) );
 
-        addModels ( characterCreationScreen , characterCreateHandler );
+        characterCreationScreen.addModel ( characterCreateHandler );
         setCurrentScreen ( characterCreationScreen );
         return characterCreationScreen;
     }
@@ -90,33 +89,16 @@ public class SetupManager {
         character.scale ( 0.2f );
         GameHandler gameHandler = new GameHandler ( character , window );
 
-        addModels ( gameScreen , gameHandler );
+        gameScreen.addModel ( gameHandler );
 
         setCurrentScreen ( gameScreen );
         CommunicationManager.userCharacter = character;
         return gameScreen;
     }
-
-
-    //TODO: Fix the cast warnings
-    public static void addModels( Object screen , Object model ) {
-        if ( screen instanceof IModelContainer ) {
-            if ( model instanceof IModel ) {
-                ((IModelContainer < IModel >) screen).addModel ( (IModel) model );
-            } else if ( model instanceof IShow ) {
-                ((IModelContainer < IShow >) screen).addModel ( (IShow) model );
-            } else {
-                throw new IllegalArgumentException ( "Unsupported model type" );
-            }
-        } else {
-            throw new IllegalArgumentException ( "Unsupported screen type" );
-        }
-    }
-
     public static void addCharacter( String information , String modelType , UserCharacter character ) {
         if ( currentScreen instanceof GameScreen ) {
-            Set < IShow > models = ((GameScreen) currentScreen).getModels ();
-            for ( IShow model : models ) {
+            Set < IHandle > models = ((GameScreen) currentScreen).getModels ();
+            for ( IHandle model : models ) {
                 if ( isCorrectModel ( model , modelType ) ) {
                     ((GameHandler) model).addCharacter ( information , character );
                 }
@@ -124,19 +106,31 @@ public class SetupManager {
         }
     }
 
-    public static void addObject( String modelType , Object object ) {
-        if ( currentScreen instanceof CharacterCreationScreen || currentScreen instanceof ServerSelectionScreen ) {
-            Set < IModel > models = ((IModelContainer < IModel >) currentScreen).getModels ();
-            for ( IModel model : models ) {
-                if ( isCorrectModel ( model , modelType ) ) {
-                    if ( object instanceof IScreenObject ) {
-                        model.addScreenObject ( ((IScreenObject) object) );
-                    }
+    public static void removeCharacter(String information, String modelType){
+        if(currentScreen instanceof GameScreen){
+            Set <IHandle> models = ((GameScreen) currentScreen).getModels ();
+            for(IHandle model : models){
+                if(isCorrectModel ( model,modelType )){
+                    ((GameHandler)model).removeCharacter ( information );
                 }
             }
         }
     }
+    public static void addObject( String modelType, IScreenObject object){
+        Set <IModel> models;
+        if(currentScreen instanceof CharacterCreationScreen){
+            models = ((CharacterCreationScreen) currentScreen).getModels ();
+        }else if(currentScreen instanceof ServerSelectionScreen){
+            models = ((ServerSelectionScreen)currentScreen).getModels ();
+        }
+        else throw new IllegalArgumentException ();
 
+        for(IModel model: models){
+            if(isCorrectModel ( model,modelType )){
+                model.addScreenObject ( object );
+            }
+        }
+    }
     private static boolean isCorrectModel( Object model , String modelType ) {
         String className = model.getClass ().getName ();
         String simpleClassName = className.substring ( className.lastIndexOf ( '.' ) + 1 );
