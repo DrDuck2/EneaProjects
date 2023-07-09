@@ -5,7 +5,6 @@ import org.example.clientLibrary.windowLibrary.GameScreenHandling.UserCharacter;
 import org.example.clientLibrary.windowLibrary.Interfaces.*;
 import org.example.clientLibrary.windowManager.ScreenManager;
 import org.example.clientLibrary.windowManager.SetupManager;
-import org.lwjgl.glfw.GLFWKeyCallback;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -15,50 +14,43 @@ import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
-public class CharacterCreateHandler implements IModel{
+public class CharacterCreateHandler implements ICreate {
 
     private final List < IScreenObject > bodyParts;
-    private final List < IClickable > clickableArea;
+    private final List< IClickable > clickableArea;
 
     private boolean screenSwitch;
 
-    private final long window;
-
-    public CharacterCreateHandler( long window ) {
+    private long window;
+    public CharacterCreateHandler(long window){
         bodyParts = new CopyOnWriteArrayList <> ();
         clickableArea = new CopyOnWriteArrayList <> ();
         this.window = window;
         screenSwitch = false;
     }
 
-    @Override
-    public synchronized void addScreenObject( IScreenObject object ) {
+    public synchronized void addScreenObject(IScreenObject object){
+        //Adds ScreenObject
         bodyParts.add ( object );
     }
-
-    @Override
-    public void removeScreenObject( IScreenObject object ) {
+    public void removeScreenObject(IScreenObject object){
         bodyParts.remove ( object );
     }
-
-    @Override
-    public List < IScreenObject > getScreenObjects( ) {
+    public List <IScreenObject> getScreenObjects(){
         return bodyParts;
     }
 
-    @Override
-    public void addClickableArea( IClickable area ) {
+
+    public void addClickableArea(IClickable area){
         clickableArea.add ( area );
     }
 
-    @Override
-    public void removeClickableArea( IClickable area ) {
+    public void removeClickableArea(IClickable area){
         clickableArea.remove ( area );
     }
+    public void init(){
 
-    @Override
-    public void init( ) {
-        glfwSetMouseButtonCallback ( window , ( win , button , action , mods ) -> {
+        glfwSetMouseButtonCallback ( window , ( win, button , action , mods ) -> {
             if ( button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS ) {
                 double[] mouseX = new double[1];
                 double[] mouseY = new double[1];
@@ -74,45 +66,42 @@ public class CharacterCreateHandler implements IModel{
             }
         } );
 
-        glfwSetKeyCallback ( window, (win,key,scancode,action,mods) ->{
+        glfwSetKeyCallback ( window , ( win , key , scancode , action , mods ) -> {
             if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                glfwSetWindowShouldClose ( window , true );
+                glfwSetWindowShouldClose ( win , true );
         } );
 
-        glfwSetKeyCallback ( window, (win,key,scancode,action,mods) ->{
+        glfwSetKeyCallback ( window , ( win , key , scancode , action , mods ) -> {
             if ( key == GLFW_KEY_ENTER && action == GLFW_RELEASE )
-                switchScreen ();
+                setSwitchScreen(true);
         } );
     }
-
-    private void switchScreen( ) {
-        screenSwitch = true;
-    }
-
-    @Override
-    public void display( ) {
-        if ( screenSwitch ) {
+    public void display(){
+        if(screenSwitch){
             cleanup ();
-        } else {
-            for ( int i = 0 ; i < clickableArea.size () ; i++ ) {
-                if ( clickableArea.get ( i ).isClicked () ) {
-                    if ( bodyParts.get ( i ).getRed () == 0.5f ) {
-                        bodyParts.get ( i ).setColor ( 0.0f , 1.0f , 0.0f );
-                    } else if ( bodyParts.get ( i ).getGreen () == 1.0f ) {
-                        bodyParts.get ( i ).setColor ( 0.0f , 0.0f , 1.0f );
-                    } else {
-                        bodyParts.get ( i ).setColor ( 0.5f , 0.0f , 0.0f );
+        }else{
+            for(int i = 0;i<clickableArea.size ();i++){
+                if(clickableArea.get ( i ).isClicked ()){
+                    if(bodyParts.get ( i ).getRed () == 0.5f){
+                        bodyParts.get ( i ).setColor ( 0.0f,1.0f,0.0f );
+                    }else if(bodyParts.get ( i ).getGreen () == 1.0f){
+                        bodyParts.get ( i ).setColor ( 0.0f,0.0f,1.0f );
+                    }else{
+                        bodyParts.get ( i ).setColor ( 0.5f,0.0f,0.0f );
                     }
                 }
-                bodyParts.get ( i ).draw ( 0 , 0 , 0 , 0 , 1 );
+                bodyParts.get ( i ).draw ( 0,0,0,0,1 );
             }
         }
     }
 
-    @Override
-    public void cleanup( ) {
+    private void setSwitchScreen(boolean value){
+        screenSwitch = value;
+    }
+    public void cleanup(){
         glfwFreeCallbacks ( window );
-        ScreenManager.setCurrentScreen ( SetupManager.getSimpleGameScreen ( new UserCharacter ( bodyParts ) , window ) );
+        ScreenManager.setCurrentScreen ( SetupManager.getSimpleGameScreen (new UserCharacter ( bodyParts ), window ) );
         ScreenManager.initScreen ();
+        SetupManager.dropLatch();
     }
 }

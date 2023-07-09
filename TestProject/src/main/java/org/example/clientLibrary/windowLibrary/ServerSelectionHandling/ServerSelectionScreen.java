@@ -5,42 +5,42 @@ import org.example.clientLibrary.windowLibrary.Interfaces.IModelContainer;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.example.clientLibrary.windowLibrary.Interfaces.*;
 
-public class ServerSelectionScreen implements IScreen, IModelContainer < IModel > {
+public class ServerSelectionScreen implements IScreen, IModelContainer<ICreate> {
 
-    private final Set < IModel > models;
+    private final Set < ICreate > models;
+    public ServerSelectionScreen(){
+        this.models = new HashSet <> ();
+    }
+    public synchronized void addModel(ICreate model)
+    {
+        boolean modelExists = models.stream()
+                .anyMatch(screenModel -> screenModel.getClass().equals(model.getClass()));
 
-    public ServerSelectionScreen( ) {this.models = new HashSet <> ();}
-    @Override
-    public synchronized void addModel( IModel model ) {
-        boolean modelExists = models.stream ()
-                .anyMatch ( screenModel -> screenModel.getClass ().equals ( model.getClass () ) );
-
-        if ( ! modelExists ) {
-            this.models.add ( model );
+        if (!modelExists) {
+            this.models.add(model);
         }
     }
-
-    @Override
-    public synchronized void removeModel( IModel model ) {this.models.remove ( model );
+    public synchronized void removeModel(ICreate model){
+        this.models.remove(model);
+    }
+    public synchronized Set<ICreate> getModels(){
+        return this.models;
     }
 
-    @Override
-    public synchronized Set < IModel > getModels( ) {return this.models;}
-
-    @Override
-    public synchronized void initModels( ) {
-        for ( IModel model : models ) {
-            model.init ();
+    //Initializes callbacks for all models on the screen
+    public synchronized void init(){
+        for(ICreate model : models)
+        {
+            model.init();
         }
     }
-
-    @Override
-    public synchronized void displayModels( ) {
-        for ( IModel model : models ) {
-            model.display ();
+    //Displays all the blocks and clickable areas necessary
+    public synchronized void display(){
+        for(ICreate model : models)
+        {
+            model.display();
         }
     }
 

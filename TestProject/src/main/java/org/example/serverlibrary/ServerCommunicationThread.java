@@ -5,21 +5,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 public class ServerCommunicationThread extends Thread implements IObserver {
+    private static final Logger logger = Logger.getLogger ( ServerCommunicationThread.class.getName () );
     private final Socket socket;
     private volatile String outputLine = null;
+
     public ServerCommunicationThread( Socket socket ) {
         super ( "ServerThread" );
         this.socket = socket;
     }
 
-    @Override
     public void ReceiveMessage( String message ) {
         outputLine = message;
     }
 
-    @Override
     public void run( ) {
         try (
                 PrintWriter out = new PrintWriter ( socket.getOutputStream () , true ) ;
@@ -27,13 +28,13 @@ public class ServerCommunicationThread extends Thread implements IObserver {
                         new InputStreamReader (
                                 socket.getInputStream () ) )
         ) {
-
             ConversationManager.getInstance ().AddClient ( this );
-            String inputLine = null;
+            TalkingProtocol kkp = new TalkingProtocol ();
+
             while ( ! socket.isClosed () && ! Thread.currentThread ().isInterrupted () ) {
                 if ( in.ready () ) {
-                    inputLine = in.readLine (); // Receive message from client
-                    if ( inputLine.split ( ":" )[1].equals ( "Bye" )) { // Client sends Bye / Disconnect
+                    String inputLine = in.readLine (); // Receive message from client
+                    if ( inputLine.equals ( "Bye" ) ) { // Client sends Bye / Disconnect
                         break;
                     }
                     ConversationManager.getInstance ().SendMessage ( this , inputLine ); // Forward the received message
@@ -46,14 +47,11 @@ public class ServerCommunicationThread extends Thread implements IObserver {
                 }
             }
 
-            //TODO: Enable disconnecting when user pressed ESC
-            if(inputLine!=null){
-                ConversationManager.getInstance ().SendMessage ( this , inputLine.split(":")[0] +":"+ "Disconnected" );
-            }
-            out.println ( "User disconnected" );
+            ConversationManager.getInstance ().SendMessage ( this , "DISCONNECTED" );
+            outputLine = kkp.processInput ( "Bye" ); //Disconnect from the Chat Room
+            out.println ( outputLine );
             ConversationManager.getInstance ().RemoveClient ( this );
             socket.close ();
-
         } catch ( IOException e ) {
             e.printStackTrace ();
         }

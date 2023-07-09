@@ -8,26 +8,21 @@ public class ClickableArea implements IClickable {
     private final int height;
     private boolean clicked;
 
-    public ClickableArea( int areaX , int areaY , int width , int height ) {
+    public ClickableArea( int areaX, int areaY, int width, int height)
+    {
         this.areaX = areaX;
         this.areaY = areaY;
         this.width = width;
         this.height = height;
         this.clicked = false;
     }
-
-    @Override
-    public boolean contains( double mouseX , double mouseY ) {
-        return mouseX >= areaX && mouseX <= areaX + width && mouseY >= areaY && mouseY <= areaY + height;
+    public boolean contains(double mouseX,double mouseY){
+        return mouseX >= areaX && mouseX <= areaX+width && mouseY >= areaY && mouseY <= areaY + height;
     }
-
-    @Override
-    public void setClicked( boolean clicked ) {
+    public void setClicked(boolean clicked){
         this.clicked = clicked;
     }
-
-    @Override
-    public boolean isClicked( ) {
+    public boolean isClicked(){
         return clicked;
     }
 

@@ -14,56 +14,46 @@ import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
 
-public class ServerSelectHandler implements IModel{
+public class ServerSelectHandler implements ICreate {
 
     private final List < IScreenObject > screenObjects;
     private final List < IClickable > clickableArea;
     private final long window;
     private int offset;
 
-    public ServerSelectHandler( long window ) {
+    public ServerSelectHandler(long window){
         this.window = window;
         this.screenObjects = new CopyOnWriteArrayList <> ();
         this.clickableArea = new CopyOnWriteArrayList <> ();
         this.offset = 0;
     }
+    public synchronized void addScreenObject(IScreenObject object){
 
-    @Override
-    public synchronized void addScreenObject( IScreenObject object ) {
+        //Adds ScreenObject
+        boolean shouldAdd = screenObjects.stream()
+                .noneMatch(existingObject -> existingObject.getBlockInformation().equals(object.getBlockInformation()));
 
-        boolean shouldAdd = screenObjects.stream ()
-                .noneMatch ( existingObject -> existingObject.getBlockInformation ().equals ( object.getBlockInformation () ) );
-
-        if ( shouldAdd ) {
-            screenObjects.add ( object );
-            addClickableArea ( new ClickableArea ( 240 , 60 + offset , 320 , 60 ) );
+        if (shouldAdd) {
+            screenObjects.add(object);
+            addClickableArea ( new ClickableArea (  240 , 60 + offset , 320 , 60 ) );
         }
     }
-
-    @Override
-    public synchronized void removeScreenObject( IScreenObject object ) {
-        this.screenObjects.remove ( object );
+    public synchronized void removeScreenObject(IScreenObject object){
+        this.screenObjects.remove(object);
     }
 
-    @Override
-    public synchronized List < IScreenObject > getScreenObjects( ) {
-        return this.screenObjects;
-    }
+    public synchronized List<IScreenObject> getScreenObjects(){return this.screenObjects;}
 
-    @Override
-    public synchronized void addClickableArea( IClickable area ) {
+    public synchronized void addClickableArea(IClickable area){
         clickableArea.add ( area );
-        offset += 75;
+        offset+=75;
     }
-
-    @Override
-    public synchronized void removeClickableArea( IClickable area ) {
+    public synchronized void removeClickableArea(IClickable area){
         clickableArea.remove ( area );
     }
-
-    @Override
-    public void init( ) {
-        glfwSetMouseButtonCallback ( window , ( win , button , action , mods ) -> {
+    public void init()
+    {
+        glfwSetMouseButtonCallback ( window , ( win, button , action , mods ) -> {
             if ( button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS ) {
                 double[] mouseX = new double[1];
                 double[] mouseY = new double[1];
@@ -84,44 +74,45 @@ public class ServerSelectHandler implements IModel{
                 glfwSetWindowShouldClose ( win , true );
         } );
     }
-
-    @Override
-    public void display( ) {
+    public void display()
+    {
         float positionY = 0;
-        float red;
-        float green;
-        float blue;
+        float red = 0.0f;
+        float green = 0.0f;
+        float blue = 0.0f;
 
-        for ( int i = 0 ; i < clickableArea.size () ; i++ ) {
+        for(int i = 0;i<clickableArea.size ();i++){
             if ( clickableArea.get ( i ).isClicked () ) {
-
+                 //Change color of clicked area
                 red = 0.0f;
                 green = 1.0f;
                 blue = 0.0f;
+                //////////////
+                //Todo: Set new screen to display
 
-                SetupManager.setLatchInfo ( getServerInformation ( clickableArea.get ( i ) ) );
+                //Setup information for the client to connect to the server
+                SetupManager.setLatchInfo(getServerInformation(clickableArea.get ( i )));
 
-                cleanup ();
+                //Todo: Retrieve server information somewhere
+                //////////////
 
+                cleanup(); //Free callbacks because they won't be necessary in new screen
             } else {
                 red = 0.0f;
                 green = 0.0f;
                 blue = 1.0f;
             }
-
-            screenObjects.get ( i ).setColor ( red , green , blue );
-            screenObjects.get ( i ).draw ( 0 , 0 , positionY , 0 , 0 );
+            screenObjects.get ( i ).setColor ( red,green,blue );
+            screenObjects.get ( i ).draw(0,0,positionY,0,0);
             positionY += 0.25f;
         }
     }
 
-    private String getServerInformation( IClickable area ) {
+    private String getServerInformation(IClickable area){
         int index = clickableArea.indexOf ( area );
         return screenObjects.get ( index ).getBlockInformation ();
     }
-
-    @Override
-    public void cleanup( ) {
+    public void cleanup(){
         glfwFreeCallbacks ( window );
         ScreenManager.setCurrentScreen ( SetupManager.getSimpleCharacterCreationScreen ( window ) );
         ScreenManager.initScreen ();

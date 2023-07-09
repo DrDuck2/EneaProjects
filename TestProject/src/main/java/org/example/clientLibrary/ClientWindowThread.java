@@ -19,14 +19,11 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class ClientWindowThread extends Thread {
     private long window;
-    private final CountdownLatchWithInfo < String > eventLatch;
-
-    public ClientWindowThread( CountdownLatchWithInfo < String > eventLatch ) {
+    private final CountdownLatchWithInfo<String> eventLatch;
+    public ClientWindowThread( CountdownLatchWithInfo<String> eventLatch ) {
         super ( "ClientWindowThread" );
         this.eventLatch = eventLatch;
     }
-
-    @Override
     public void run( ) {
 
         init ();
@@ -35,47 +32,56 @@ public class ClientWindowThread extends Thread {
 
     }
 
-    private void init( ) {
+    private void init() {
         GLFWErrorCallback.createPrint ( System.err ).set ();
 
         if ( ! glfwInit () )
             throw new IllegalStateException ( "Unable to initialize GLFW" );
 
-        glfwDefaultWindowHints ();
-        glfwWindowHint ( GLFW_VISIBLE , GLFW_FALSE );
-        glfwWindowHint ( GLFW_RESIZABLE , GLFW_FALSE );
+        // Configure GLFW
+        glfwDefaultWindowHints (); // optional, the current window hints are already the default
+        glfwWindowHint ( GLFW_VISIBLE , GLFW_FALSE ); // the window will stay hidden after creation
+        glfwWindowHint ( GLFW_RESIZABLE , GLFW_FALSE ); // the window will be resizable
 
+        // Create the window
         window = glfwCreateWindow ( 800 , 600 , "Hello World!" , NULL , NULL );
         if ( window == NULL )
             throw new RuntimeException ( "Failed to create the GLFW window" );
 
 
-        //TODO: Refactor SetupManager and ScreenManager for more clean code
+        //Todo
+        //Screen setup and screen init
         SetupManager.setLatch ( eventLatch );
-        ScreenManager.setCurrentScreen ( SetupManager.getSimpleServerSelectionScreen ( window ) );
+        ScreenManager.setCurrentScreen ( SetupManager.getSimpleServerSelectionScreen ( window ) ); //returns server selection screen
         ScreenManager.initScreen ();
+        //////
 
 
+        // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush () ) {
             IntBuffer pWidth = stack.mallocInt ( 1 ); // int*
             IntBuffer pHeight = stack.mallocInt ( 1 ); // int*
 
+            // Get the window size passed to glfwCreateWindow
             glfwGetWindowSize ( window , pWidth , pHeight );
 
-            GLFWVidMode vidMode = glfwGetVideoMode ( glfwGetPrimaryMonitor () );
+            // Get the resolution of the primary monitor
+            GLFWVidMode vidmode = glfwGetVideoMode ( glfwGetPrimaryMonitor () );
 
-            assert vidMode != null;
+            // Center the window
+            assert vidmode != null;
             glfwSetWindowPos (
                     window ,
-                    (vidMode.width () - pWidth.get ( 0 )) / 2 ,
-                    (vidMode.height () - pHeight.get ( 0 )) / 2
+                    (vidmode.width () - pWidth.get ( 0 )) / 2 ,
+                    (vidmode.height () - pHeight.get ( 0 )) / 2
             );
-        }
+        } // the stack frame is popped automatically
 
+        // Make the OpenGL context current
         glfwMakeContextCurrent ( window );
-
+        // Enable v-sync
         glfwSwapInterval ( 1 );
-
+        // Make the window visible
         glfwShowWindow ( window );
     }
 
@@ -90,7 +96,10 @@ public class ClientWindowThread extends Thread {
 
             glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+            /////
+            //Displaying current screen Server selection screen or Character creation screen
             ScreenManager.displayScreen ();
+            /////
 
             glfwSwapBuffers ( window );
         }
@@ -99,7 +108,7 @@ public class ClientWindowThread extends Thread {
     private void cleanup( ) {
         glfwFreeCallbacks ( window );
         glfwDestroyWindow ( window );
-
+        
         glfwTerminate ();
         Objects.requireNonNull ( glfwSetErrorCallback ( null ) ).free ();
     }
