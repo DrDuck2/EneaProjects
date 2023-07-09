@@ -100,7 +100,6 @@ public class GameHandler implements IHandle {
                 CommunicationManager.addInformation(this.offsetLeft, this.offsetRight, this.offsetDown, this.offsetUp);
             }
     }
-
     @Override
     public void cleanup( ) {
         CommunicationManager.closeConnection ();
